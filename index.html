@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tiếng Anh Ngôn Ngữ Thứ 2 – Chương trình GDPT 2018 (Lớp 1–9)</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Tùy chỉnh thanh cuộn và hiệu ứng mượt mà */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Chế độ Immersion Mode: Ẩn nghĩa tiếng Việt để luyện đọc thuần tiếng Anh */
+    body.immersion-on .vi-text {
+      display: none !important;
+    }
+    body.immersion-on .vi-hint-badge {
+      display: inline-flex !important;
+    }
+
+    /* Hiệu ứng nút loa khi đang phát âm */
+    @keyframes speakPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.5); }
+      50% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(14, 165, 233, 0); }
+    }
+    .speaking-active {
+      animation: speakPulse 1s infinite;
+      background-color: #0284c7 !important;
+      color: #ffffff !important;
+    }
+
+    /* Hiệu ứng nhảy nhẹ khi cộng điểm sao */
+    @keyframes starPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
+    .star-pop {
+      animation: starPop 0.4s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-sky-200 selection:text-sky-900">
+
+  <!-- ==================== 1. THANH ĐIỀU HƯỚNG CỐ ĐỊNH (STICKY HEADER) ==================== -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20 gap-3">
+        <!-- Logo & Tên trang -->
+        <a href="#home" class="flex items-center gap-3 group min-w-0">
+          <div class="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-sky-500 to-teal-500 flex items-center justify-center text-white text-xl md:text-2xl shadow-md shadow-sky-500/20 group-hover:scale-105 transition-transform shrink-0">
+            🌐
+          </div>
+          <div class="min-w-0">
+            <div class="font-extrabold text-sm sm:text-base md:text-lg tracking-tight text-slate-900 truncate leading-tight">
+              TIẾNG ANH NGÔN NGỮ THỨ 2
+            </div>
+            <div class="text-[10px] sm:text-xs font-semibold text-teal-600 tracking-wide truncate">
+              CHƯƠNG TRÌNH GDPT 2018 • LỚP 1 ĐẾN LỚP 9
+            </div>
+          </div>
+        </a>
+
+        <!-- Menu điều hướng (Desktop) -->
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="#home" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition-colors">Trang chủ</a>
+          <a href="#explore" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition-colors">Khám phá Lớp 1–9</a>
+          <a href="#glossary" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition-colors">Tra cứu thuật ngữ</a>
+          <a href="#info" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition-colors">Thông tin</a>
+        </nav>
+
+        <!-- Công cụ bên phải: Immersion Mode + Điểm sao + Menu Mobile -->
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+          <!-- Nút gạt Immersion Mode (Ẩn/Hiện nghĩa Tiếng Việt) -->
+          <button
+            id="immersionToggleBtn"
+            type="button"
+            onclick="toggleImmersionMode()"
+            title="Bật/Tắt chế độ thuần Tiếng Anh (Ẩn nghĩa Tiếng Việt)"
+            class="flex items-center gap-2 px-2.5 sm:px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 transition-all text-xs sm:text-sm font-semibold text-slate-700"
+          >
+            <span id="immersionDot" class="w-2.5 h-2.5 rounded-full bg-slate-400 transition-colors"></span>
+            <span class="hidden sm:inline" id="immersionLabel">Song ngữ</span>
+            <span class="sm:hidden" id="immersionLabelShort">VN/EN</span>
+          </button>
+
+          <!-- Huy hiệu Điểm Sao -->
+          <div
+            id="starBadge"
+            class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 font-bold text-xs sm:text-sm shadow-sm"
+            title="Tổng điểm sao tích lũy qua các bài trắc nghiệm"
+          >
+            <span class="text-base leading-none">⭐</span>
+            <span id="starCount">0</span>
+            <span class="hidden md:inline font-semibold text-amber-600">sao</span>
+          </div>
+
+          <!-- Nút Menu Mobile -->
+          <button
+            id="mobileMenuBtn"
+            type="button"
+            onclick="toggleMobileMenu()"
+            aria-label="Mở menu điều hướng"
+            class="lg:hidden p-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Menu thả xuống trên Mobile -->
+      <div id="mobileMenu" class="hidden lg:hidden pb-4 pt-2 border-t border-slate-100 space-y-1">
+        <a href="#home" onclick="closeMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700">🏠 Trang chủ</a>
+        <a href="#explore" onclick="closeMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700">📚 Khám phá Lớp 1–9</a>
+        <a href="#glossary" onclick="closeMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700">🔍 Tra cứu thuật ngữ</a>
+        <a href="#info" onclick="closeMobileMenu()" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700">ℹ️ Thông tin & Lộ trình</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 2. PHẦN MỞ ĐẦU (HERO SECTION) ==================== -->
+  <section id="home" class="relative overflow-hidden bg-gradient-to-b from-sky-50 via-teal-50/40 to-slate-50 pt-10 pb-16 md:pt-16 md:pb-24">
+    <!-- Họa tiết nền mềm mại -->
+    <div class="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-sky-200/30 blur-3xl"></div>
+    <div class="pointer-events-none absolute top-40 -left-24 w-80 h-80 rounded-full bg-teal-200/30 blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-4xl mx-auto">
+        <!-- Nhãn giới thiệu -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-sky-200 shadow-sm text-sky-700 text-xs sm:text-sm font-semibold mb-6">
+          <span>✨</span>
+          <span>Học liệu số tương tác • Chuẩn Chương trình GDPT 2018</span>
+        </div>
+
+        <!-- Tiêu đề lớn -->
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+          Học mọi môn bằng Tiếng Anh –
+          <span class="bg-gradient-to-r from-sky-600 to-teal-500 bg-clip-text text-transparent">
+            Tự tin hội nhập
+          </span>
+        </h1>
+
+        <!-- Mô tả ngắn -->
+        <p class="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto mb-8">
+          Đồng hành cùng hành trình đưa <strong>Tiếng Anh trở thành ngôn ngữ thứ 2 trong trường học</strong>. Khám phá trọn bộ thuật ngữ chuyên môn, câu giao tiếp lớp học và trắc nghiệm liên môn cho <strong>tất cả các môn học từ Lớp 1 đến Lớp 9</strong> theo Chương trình GDPT 2018.
+        </p>
+
+        <!-- Nút CTA chính -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-12">
+          <a
+            href="#explore"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-gradient-to-r from-sky-600 to-teal-500 hover:from-sky-700 hover:to-teal-600 text-white font-bold text-base shadow-lg shadow-sky-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all"
+          >
+            <span>🚀 Bắt đầu khám phá Lớp 1–9</span>
+          </a>
+          <a
+            href="#glossary"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-base border border-slate-200 shadow-sm hover:border-sky-300 transition-all"
+          >
+            <span>🔍 Tra cứu thuật ngữ nhanh</span>
+          </a>
+        </div>
+
+        <!-- 3 Thẻ Giá trị cốt lõi -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-left mb-12">
+          <div class="bg-white/90 backdrop-blur rounded-2xl p-5 border border-sky-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-11 h-11 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl mb-3">📘</div>
+            <h3 class="font-bold text-slate-900 text-base mb-1">Bám sát CT GDPT 2018</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Đầy đủ 100% môn học bắt buộc từng khối lớp Tiểu học (Lớp 1–5) và THCS (Lớp 6–9) theo đúng khung chương trình mới.
+            </p>
+          </div>
+          <div class="bg-white/90 backdrop-blur rounded-2xl p-5 border border-teal-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-11 h-11 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-2xl mb-3">🔊</div>
+            <h3 class="font-bold text-slate-900 text-base mb-1">Phát âm chuẩn Anh–Mỹ</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Tích hợp công nghệ đọc giọng nói Web Speech API (chọn giọng Anh–Mỹ US / Anh–Anh UK) kèm phiên âm quốc tế IPA.
+            </p>
+          </div>
+          <div class="bg-white/90 backdrop-blur rounded-2xl p-5 border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mb-3">🎯</div>
+            <h3 class="font-bold text-slate-900 text-base mb-1">Luyện tập tương tác theo lớp</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Mỗi môn học đều có câu giao tiếp lớp học, trắc nghiệm liên môn chấm điểm tức thì, giải thích chi tiết và tích lũy sao.
+            </p>
+          </div>
+        </div>
+
+        <!-- 3 Thẻ Vai trò: Học sinh, Giáo viên, Phụ huynh -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+          <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 mb-5 flex items-center justify-center gap-2">
+            <span>🤝</span> Ai cũng có thể đồng hành dễ dàng
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-left">
+            <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-100">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">🎒</span>
+                <h3 class="font-bold text-sky-900">Dành cho Học sinh</h3>
+              </div>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Tự học từ vựng Toán, Khoa học, Tin học... nghe phát âm nhiều lần, bật chế độ <em>Thuần Tiếng Anh</em> để thử thách bản thân và săn điểm sao.
+              </p>
+            </div>
+            <div class="p-4 rounded-2xl bg-teal-50/70 border border-teal-100">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">👩🏫</span>
+                <h3 class="font-bold text-teal-900">Dành cho Giáo viên</h3>
+              </div>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Nguồn mẫu câu <em>Classroom English</em> sẵn có cho từng bộ môn giúp giáo viên dễ dàng lồng ghép giảng dạy song ngữ (CLIL) trên lớp.
+              </p>
+            </div>
+            <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-100">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">👨👩👧👦</span>
+                <h3 class="font-bold text-amber-900">Dành cho Phụ huynh</h3>
+              </div>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Cùng con ôn bài mỗi tối ngay trên điện thoại không cần cài đặt ứng dụng, theo dõi tiến độ tích lũy sao theo từng môn học.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. KHU VỰC CHÍNH: KHÁM PHÁ LỚP 1 – 9 ==================== -->
+  <section id="explore" class="py-14 md:py-20 bg-white border-t border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Tiêu đề khu vực -->
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="inline-block px-3.5 py-1 rounded-full bg-teal-50 text-teal-700 font-bold text-xs uppercase tracking-wider mb-3">
+          Khung chương trình GDPT 2018
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
+          Khám phá đầy đủ các môn học Lớp 1 – 9
+        </h2>
+        <p class="text-slate-600 text-sm sm:text-base">
+          Chọn cấp học và khối lớp bên dưới để xem danh sách môn học bắt buộc cùng kho học liệu song ngữ tương ứng.
+        </p>
+      </div>
+
+      <!-- Tab chuyển cấp học: Tiểu học (1-5) & THCS (6-9) -->
+      <div class="flex flex-col sm:flex-row justify-center gap-3 mb-6">
+        <button
+          id="tabPrimary"
+          type="button"
+          onclick="selectLevel('primary')"
+          class="px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 shadow-sm"
+        >
+          <span>🌱</span> Cấp Tiểu học (Lớp 1 – 5)
+        </button>
+        <button
+          id="tabSecondary"
+          type="button"
+          onclick="selectLevel('secondary')"
+          class="px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 shadow-sm"
+        >
+          <span>🚀</span> Cấp THCS (Lớp 6 – 9)
+        </button>
+      </div>
+
+      <!-- Thanh chọn từng khối lớp cụ thể -->
+      <div id="gradeSelector" class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
+        <!-- Render động bằng JavaScript -->
+      </div>
+
+      <!-- Thanh tóm tắt khối lớp đang chọn -->
+      <div class="bg-gradient-to-r from-sky-50 to-teal-50 border border-sky-100 rounded-2xl p-4 sm:p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <div id="gradeBannerIcon" class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl shrink-0">
+            🏫
+          </div>
+          <div>
+            <h3 id="gradeBannerTitle" class="font-extrabold text-slate-900 text-base sm:text-lg">
+              Lớp 1 • Chương trình GDPT 2018
+            </h3>
+            <p id="gradeBannerDesc" class="text-xs sm:text-sm text-slate-600">
+              Gồm 8 môn học & hoạt động giáo dục bắt buộc.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-sky-100 shadow-sm text-xs sm:text-sm font-semibold text-sky-800 shrink-0">
+          <span>🏆</span>
+          <span id="gradeProgressText">Hoàn thành: 0/8 môn</span>
+        </div>
+      </div>
+
+      <!-- Lưới thẻ môn học -->
+      <div id="subjectsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+        <!-- Render động bằng JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. KHU VỰC TRA CỨU NHANH THUẬT NGỮ LIÊN MÔN ==================== -->
+  <section id="glossary" class="py-14 md:py-20 bg-slate-50 border-t border-slate-200/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-8">
+        <span class="inline-block px-3.5 py-1 rounded-full bg-sky-100 text-sky-700 font-bold text-xs uppercase tracking-wider mb-3">
+          Từ điển liên môn 1–9
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
+          Tra cứu nhanh thuật ngữ liên môn
+        </h2>
+        <p class="text-slate-600 text-sm sm:text-base">
+          Nhập từ Tiếng Anh, nghĩa Tiếng Việt hoặc tên môn học (ví dụ: <em>fraction</em>, <em>phân số</em>, <em>Toán</em>, <em>cell</em>, <em>algorithm</em>...) để tra cứu tức thì và nghe phát âm.
+        </p>
+      </div>
+
+      <!-- Thanh tìm kiếm + Bộ lọc cấp học -->
+      <div class="max-w-3xl mx-auto mb-8">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">🔍</span>
+            <input
+              id="glossarySearchInput"
+              type="text"
+              oninput="renderGlossary()"
+              placeholder="Tìm từ tiếng Anh, nghĩa tiếng Việt hoặc tên môn..."
+              class="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm text-sm sm:text-base text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all"
+            />
+            <button
+              id="clearSearchBtn"
+              type="button"
+              onclick="clearGlossarySearch()"
+              class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold"
+              title="Xóa từ khóa"
+            >✕</button>
+          </div>
+          <select
+            id="glossaryLevelFilter"
+            onchange="renderGlossary()"
+            class="px-4 py-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          >
+            <option value="all">Tất cả cấp học (Lớp 1–9)</option>
+            <option value="primary">Cấp Tiểu học (Lớp 1–5)</option>
+            <option value="secondary">Cấp THCS (Lớp 6–9)</option>
+          </select>
+        </div>
+        <div id="glossaryCountInfo" class="mt-3 text-xs sm:text-sm text-slate-500 font-medium text-center sm:text-left">
+          Đang hiển thị các thuật ngữ tiêu biểu...
+        </div>
+      </div>
+
+      <!-- Kết quả tra cứu -->
+      <div id="glossaryResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Render động bằng JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. PHẦN THÔNG TIN & CHÂN TRANG ==================== -->
+  <section id="info" class="py-14 md:py-20 bg-white border-t border-slate-200/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Lộ trình & Mục tiêu -->
+        <div class="lg:col-span-7 bg-gradient-to-br from-slate-50 to-sky-50/50 rounded-3xl p-6 sm:p-8 border border-slate-200/80">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 text-sky-800 text-xs font-bold mb-4">
+            <span>🎯</span> Định hướng giáo dục
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-4">
+            Lộ trình đưa Tiếng Anh thành ngôn ngữ thứ 2 theo CT GDPT 2018
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed mb-5">
+            Học liệu được xây dựng nhằm hỗ trợ học sinh làm quen và sử dụng Tiếng Anh tự nhiên như một công cụ học tập liên môn (phương pháp <strong>CLIL</strong> – Content and Language Integrated Learning), từ những khái niệm gần gũi ở bậc Tiểu học đến tư duy học thuật ở bậc THCS.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
+              <div class="text-xs font-extrabold text-sky-600 uppercase mb-1">Giai đoạn 1 • Lớp 1–2</div>
+              <p class="text-xs text-slate-600 leading-relaxed">Làm quen âm thanh, từ khóa hình ảnh trực quan trong Toán, Tự nhiên & Xã hội, Nghệ thuật.</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
+              <div class="text-xs font-extrabold text-teal-600 uppercase mb-1">Giai đoạn 2 • Lớp 3–5</div>
+              <p class="text-xs text-slate-600 leading-relaxed">Mở rộng câu giao tiếp lớp học và thuật ngữ Khoa học, Lịch sử – Địa lí, Tin học, Công nghệ.</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
+              <div class="text-xs font-extrabold text-indigo-600 uppercase mb-1">Giai đoạn 3 • Lớp 6–9</div>
+              <p class="text-xs text-slate-600 leading-relaxed">Đọc hiểu, giải quyết vấn đề và trắc nghiệm tư duy bằng Tiếng Anh ở tất cả 12 môn THCS.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thông tin tác giả / đơn vị + Đặt lại tiến độ -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+          <h3 class="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+            <span>🏫</span> Thông tin đơn vị & Tác giả
+          </h3>
+          <div class="space-y-3 text-sm text-slate-600 mb-6">
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-100">
+              <span class="font-semibold text-slate-500">Sản phẩm:</span>
+              <span class="font-bold text-slate-800 text-right">Học liệu số Tiếng Anh NN2 (1–9)</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-100">
+              <span class="font-semibold text-slate-500">Đơn vị thực hiện:</span>
+              <span class="font-semibold text-slate-800 text-right">[Tên Trường / Nhóm Giáo viên]</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-100">
+              <span class="font-semibold text-slate-500">Tác giả biên soạn:</span>
+              <span class="font-semibold text-slate-800 text-right">[Họ và tên Giáo viên]</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-100">
+              <span class="font-semibold text-slate-500">Phiên bản:</span>
+              <span class="font-semibold text-teal-600 text-right">V1.0 • Single-File Web (GitHub Pages)</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <div class="text-xs font-bold text-slate-800">Quản lý dữ liệu học tập</div>
+              <div class="text-xs text-slate-500">Điểm sao & tiến độ được lưu trên trình duyệt này.</div>
+            </div>
+            <button
+              type="button"
+              onclick="openResetModal()"
+              class="px-4 py-2.5 rounded-xl bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 font-bold text-xs transition-colors shrink-0"
+            >
+              🔄 Đặt lại tiến độ học
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chân trang -->
+  <footer class="bg-slate-900 text-slate-400 py-8 text-center text-xs sm:text-sm">
+    <div class="max-w-7xl mx-auto px-4">
+      <p class="font-semibold text-slate-200 mb-1">
+        🌐 Tiếng Anh Ngôn Ngữ Thứ 2 • Chương trình GDPT 2018 (Lớp 1 – Lớp 9)
+      </p>
+      <p>Thiết kế chạy độc lập (HTML/CSS/JS) • Sẵn sàng xuất bản miễn phí trên GitHub Pages.</p>
+    </div>
+  </footer>
+
+  <!-- ==================== 4. MODAL KHÔNG GIAN HỌC TƯƠNG TÁC ==================== -->
+  <div
+    id="learningModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4 bg-slate-900/60 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="bg-white w-full max-w-4xl max-h-[92vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+      <!-- Header Modal -->
+      <div class="px-5 sm:px-6 py-4 bg-gradient-to-r from-sky-600 to-teal-500 text-white flex items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-3 min-w-0">
+          <div id="modalSubjectIcon" class="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-2xl shrink-0">
+            📐
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="modalGradeBadge" class="px-2.5 py-0.5 rounded-full bg-white/20 text-[11px] font-bold uppercase tracking-wider">Lớp 1</span>
+              <span id="modalSubjectEn" class="text-xs sm:text-sm font-semibold text-sky-100 truncate">Mathematics</span>
+            </div>
+            <h3 id="modalSubjectVi" class="text-lg sm:text-xl font-extrabold truncate leading-tight">Toán</h3>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <!-- Chọn giọng đọc US / UK -->
+          <div class="hidden sm:flex items-center bg-white/15 rounded-xl p-1 text-xs font-bold">
+            <button id="voiceUSBtn" type="button" onclick="setVoiceAccent('en-US')" class="px-2.5 py-1 rounded-lg transition-colors bg-white text-sky-700">🇺🇸 US</button>
+            <button id="voiceUKBtn" type="button" onclick="setVoiceAccent('en-GB')" class="px-2.5 py-1 rounded-lg transition-colors text-white hover:bg-white/10">🇬🇧 UK</button>
+          </div>
+          <!-- Nút đóng Modal -->
+          <button
+            type="button"
+            onclick="closeLearningModal()"
+            aria-label="Đóng cửa sổ học"
+            class="w-9 h-9 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center text-white font-bold transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Thanh chọn giọng trên mobile + Thanh 3 Tab -->
+      <div class="px-4 sm:px-6 pt-3 pb-0 bg-slate-50 border-b border-slate-200 shrink-0">
+        <div class="flex sm:hidden items-center justify-between mb-2.5 text-xs">
+          <span class="font-semibold text-slate-500">Giọng đọc phát âm:</span>
+          <div class="flex items-center bg-slate-200/80 rounded-lg p-0.5 font-bold">
+            <button id="voiceUSBtnMob" type="button" onclick="setVoiceAccent('en-US')" class="px-2.5 py-1 rounded-md bg-white text-sky-700 shadow-sm">🇺🇸 US</button>
+            <button id="voiceUKBtnMob" type="button" onclick="setVoiceAccent('en-GB')" class="px-2.5 py-1 rounded-md text-slate-600">🇬🇧 UK</button>
+          </div>
+        </div>
+        <div class="flex gap-1 sm:gap-2 overflow-x-auto">
+          <button id="modalTabVocab" type="button" onclick="switchModalTab('vocab')" class="px-4 py-3 text-xs sm:text-sm font-bold border-b-2 transition-colors whitespace-nowrap">
+            📖 Từ vựng & Thuật ngữ
+          </button>
+          <button id="modalTabClassroom" type="button" onclick="switchModalTab('classroom')" class="px-4 py-3 text-xs sm:text-sm font-bold border-b-2 transition-colors whitespace-nowrap">
+            💬 Giao tiếp lớp học
+          </button>
+          <button id="modalTabQuiz" type="button" onclick="switchModalTab('quiz')" class="px-4 py-3 text-xs sm:text-sm font-bold border-b-2 transition-colors whitespace-nowrap">
+            🎯 Thử thách trắc nghiệm
+          </button>
+        </div>
+      </div>
+
+      <!-- Nội dung bên trong Modal (cuộn độc lập) -->
+      <div id="modalBody" class="p-4 sm:p-6 overflow-y-auto flex-1 bg-slate-50/50">
+        <!-- Render động bằng JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL XÁC NHẬN ĐẶT LẠI TIẾN ĐỘ (KHÔNG DÙNG confirm()) ==================== -->
+  <div
+    id="resetConfirmModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-200 text-center">
+      <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-3xl">
+        🔄
+      </div>
+      <h3 class="text-lg font-extrabold text-slate-900 mb-2">Đặt lại toàn bộ tiến độ học?</h3>
+      <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+        Tất cả điểm sao tích lũy và lịch sử hoàn thành các bài trắc nghiệm từ Lớp 1 đến Lớp 9 sẽ được đưa về 0. Bạn có chắc chắn muốn tiếp tục?
+      </p>
+      <div class="flex gap-3 justify-center">
+        <button
+          type="button"
+          onclick="closeResetModal()"
+          class="flex-1 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition-colors"
+        >
+          Hủy bỏ
+        </button>
+        <button
+          type="button"
+          onclick="confirmResetProgress()"
+          class="flex-1 px-4 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-sm transition-colors"
+        >
+          Đồng ý đặt lại
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== THÔNG BÁO TOAST GÓC MÀN HÌNH ==================== -->
+  <div
+    id="toastBox"
+    class="fixed bottom-5 right-5 z-50 hidden max-w-sm px-4 py-3 rounded-2xl bg-slate-900 text-white text-sm font-semibold shadow-xl flex items-center gap-2.5 transition-all"
+  >
+    <span id="toastIcon">✨</span>
+    <span id="toastMessage">Thông báo</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT: DỮ LIỆU GDPT 2018 & LOGIC TƯƠNG TÁC ==================== -->
+  <script>
+    /* =========================================================================
+       1. CẤU HÌNH KHUNG CHƯƠNG TRÌNH GDPT 2018 (LỚP 1 ĐẾN LỚP 9)
+       ========================================================================= */
+    const GRADE_CONFIG = {
+      1: { level: 'primary', label: 'Lớp 1', icon: '🌱', desc: 'Cấp Tiểu học • 8 môn học & hoạt động giáo dục bắt buộc', subjects: ['math_p', 'vietnamese', 'ethics', 'nature_society', 'pe_p', 'music', 'art', 'experiential'] },
+      2: { level: 'primary', label: 'Lớp 2', icon: '🌿', desc: 'Cấp Tiểu học • 8 môn học & hoạt động giáo dục bắt buộc', subjects: ['math_p', 'vietnamese', 'ethics', 'nature_society', 'pe_p', 'music', 'art', 'experiential'] },
+      3: { level: 'primary', label: 'Lớp 3', icon: '📘', desc: 'Cấp Tiểu học • 11 môn học bắt buộc (thêm Tiếng Anh, Tin học, Công nghệ)', subjects: ['math_p', 'vietnamese', 'english_p', 'ethics', 'nature_society', 'informatics_p', 'technology_p', 'pe_p', 'music', 'art', 'experiential'] },
+      4: { level: 'primary', label: 'Lớp 4', icon: '🔬', desc: 'Cấp Tiểu học • 12 môn học bắt buộc (tách Khoa học & Lịch sử - Địa lí)', subjects: ['math_p', 'vietnamese', 'english_p', 'ethics', 'science', 'hist_geo_p', 'informatics_p', 'technology_p', 'pe_p', 'music', 'art', 'experiential'] },
+      5: { level: 'primary', label: 'Lớp 5', icon: '🎓', desc: 'Cấp Tiểu học • 12 môn học bắt buộc chuẩn bị chuyển cấp THCS', subjects: ['math_p', 'vietnamese', 'english_p', 'ethics', 'science', 'hist_geo_p', 'informatics_p', 'technology_p', 'pe_p', 'music', 'art', 'experiential'] },
+      6: { level: 'secondary', label: 'Lớp 6', icon: '🚀', desc: 'Cấp THCS • 12 môn học bắt buộc theo CT GDPT 2018', subjects: ['math_s', 'literature', 'english_s', 'civic', 'natural_science', 'hist_geo_s', 'informatics_s', 'technology_s', 'pe_s', 'arts', 'career', 'local_edu'] },
+      7: { level: 'secondary', label: 'Lớp 7', icon: '🧭', desc: 'Cấp THCS • 12 môn học bắt buộc theo CT GDPT 2018', subjects: ['math_s', 'literature', 'english_s', 'civic', 'natural_science', 'hist_geo_s', 'informatics_s', 'technology_s', 'pe_s', 'arts', 'career', 'local_edu'] },
+      8: { level: 'secondary', label: 'Lớp 8', icon: '⚗️', desc: 'Cấp THCS • 12 môn học bắt buộc theo CT GDPT 2018', subjects: ['math_s', 'literature', 'english_s', 'civic', 'natural_science', 'hist_geo_s', 'informatics_s', 'technology_s', 'pe_s', 'arts', 'career', 'local_edu'] },
+      9: { level: 'secondary', label: 'Lớp 9', icon: '🏆', desc: 'Cấp THCS • 12 môn học bắt buộc hoàn thiện giáo dục cơ bản', subjects: ['math_s', 'literature', 'english_s', 'civic', 'natural_science', 'hist_geo_s', 'informatics_s', 'technology_s', 'pe_s', 'arts', 'career', 'local_edu'] }
+    };
+
+    /* =========================================================================
+       2. KHO DỮ LIỆU HỌC LIỆU SONG NGỮ ĐẦY ĐỦ CHO TỪNG MÔN HỌC (TIỂU HỌC & THCS)
+       Mỗi môn gồm: 5 thuật ngữ (IPA, nghĩa, ví dụ), 3 mẫu câu lớp học, 3 câu Quiz
+       ========================================================================= */
+    const SUBJECTS_DB = {
+      /* -------------------- CÁC MÔN CẤP TIỂU HỌC (LỚP 1 - 5) -------------------- */
+      math_p: {
+        nameVi: 'Toán', nameEn: 'Mathematics', icon: '📐', color: 'sky', level: 'primary',
+        vocab: [
+          { en: 'Addition', ipa: '/əˈdɪʃ.ən/', vi: 'Phép cộng', exEn: 'We use addition to find the total number.', exVi: 'Chúng ta dùng phép cộng để tìm tổng số.' },
+          { en: 'Subtraction', ipa: '/səbˈtræk.ʃən/', vi: 'Phép trừ', exEn: 'Subtraction helps us find how many are left.', exVi: 'Phép trừ giúp chúng ta tìm số còn lại.' },
+          { en: 'Fraction', ipa: '/ˈfræk.ʃən/', vi: 'Phân số', exEn: 'One half is a simple fraction.', exVi: 'Một phần hai là một phân số đơn giản.' },
+          { en: 'Perimeter', ipa: '/pəˈrɪm.ɪ.tər/', vi: 'Chu vi', exEn: 'Add all four sides to find the perimeter of a square.', exVi: 'Cộng cả bốn cạnh để tìm chu vi hình vuông.' },
+          { en: 'Triangle', ipa: '/ˈtraɪ.æŋ.ɡəl/', vi: 'Hình tam giác', exEn: 'A triangle has three sides and three corners.', exVi: 'Hình tam giác có ba cạnh và ba góc.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Let’s solve this math problem together.', vi: 'Chúng ta hãy cùng giải bài toán này nhé.' },
+          { role: 'Học sinh', en: 'The answer is twenty-five!', vi: 'Đáp án là hai mươi lăm ạ!' },
+          { role: 'Giáo viên', en: 'Please show your calculation on the board.', vi: 'Con hãy trình bày phép tính lên bảng nhé.' }
+        ],
+        quiz: [
+          { qEn: 'Which shape has three sides?', qVi: 'Hình nào có ba cạnh?', opts: ['Square', 'Triangle', 'Circle', 'Rectangle'], ans: 1, expEn: 'A triangle always has 3 sides.', expVi: 'Hình tam giác (Triangle) luôn có 3 cạnh.' },
+          { qEn: 'What is the English word for "Phép cộng"?', qVi: 'Từ tiếng Anh của "Phép cộng" là gì?', opts: ['Subtraction', 'Perimeter', 'Addition', 'Fraction'], ans: 2, expEn: 'Addition means putting numbers together (+).', expVi: 'Addition là phép cộng.' },
+          { qEn: 'What is 1/2 called in Math?', qVi: '1/2 được gọi là gì trong Toán học?', opts: ['A fraction', 'A triangle', 'A ruler', 'A meter'], ans: 0, expEn: '1/2 is a fraction (phân số).', expVi: '1/2 là một phân số (fraction).' }
+        ]
+      },
+
+      vietnamese: {
+        nameVi: 'Tiếng Việt', nameEn: 'Vietnamese', icon: '📖', color: 'rose', level: 'primary',
+        vocab: [
+          { en: 'Sentence', ipa: '/ˈsen.təns/', vi: 'Câu văn', exEn: 'Start every sentence with a capital letter.', exVi: 'Bắt đầu mỗi câu văn bằng một chữ cái viết hoa.' },
+          { en: 'Paragraph', ipa: '/ˈpær.ə.ɡrɑːf/', vi: 'Đoạn văn', exEn: 'Write a short paragraph about your family.', exVi: 'Hãy viết một đoạn văn ngắn về gia đình em.' },
+          { en: 'Poem', ipa: '/ˈpəʊ.ɪm/', vi: 'Bài thơ', exEn: 'We read a lovely poem about spring.', exVi: 'Chúng em đọc một bài thơ hay về mùa xuân.' },
+          { en: 'Fairy tale', ipa: '/ˈfeə.ri teɪl/', vi: 'Truyện cổ tích', exEn: 'Tam Cam is a famous Vietnamese fairy tale.', exVi: 'Tấm Cám là một truyện cổ tích nổi tiếng của Việt Nam.' },
+          { en: 'Spelling', ipa: '/ˈspel.ɪŋ/', vi: 'Chính tả', exEn: 'Check your spelling carefully after writing.', exVi: 'Kiểm tra chính tả cẩn thận sau khi viết.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Please read the first paragraph aloud.', vi: 'Em hãy đọc to đoạn văn đầu tiên.' },
+          { role: 'Học sinh', en: 'What is the main idea of this story?', vi: 'Ý chính của câu chuyện này là gì ạ?' },
+          { role: 'Giáo viên', en: 'Pay attention to your handwriting and spelling.', vi: 'Các con chú ý nét chữ và lỗi chính tả nhé.' }
+        ],
+        quiz: [
+          { qEn: 'Which word means "Truyện cổ tích"?', qVi: 'Từ nào có nghĩa là "Truyện cổ tích"?', opts: ['Poem', 'Fairy tale', 'Spelling', 'Letter'], ans: 1, expEn: 'Fairy tale means truyện cổ tích.', expVi: 'Fairy tale có nghĩa là truyện cổ tích.' },
+          { qEn: 'What should you check carefully so your words have no mistakes?', qVi: 'Em cần kiểm tra kỹ điều gì để các từ không bị sai?', opts: ['Spelling', 'Swimming', 'Counting', 'Painting'], ans: 0, expEn: 'Spelling (chính tả) ensures words are written correctly.', expVi: 'Spelling (chính tả) giúp viết đúng từng chữ.' },
+          { qEn: 'A group of sentences about one topic is called a ___.', qVi: 'Một nhóm các câu viết về cùng một chủ đề gọi là ___.', opts: ['Word', 'Paragraph', 'Number', 'Song'], ans: 1, expEn: 'A paragraph (đoạn văn) consists of related sentences.', expVi: 'Paragraph là đoạn văn.' }
+        ]
+      },
+
+      english_p: {
+        nameVi: 'Tiếng Anh', nameEn: 'English', icon: '🌍', color: 'indigo', level: 'primary',
+        vocab: [
+          { en: 'Greeting', ipa: '/ˈɡriː.tɪŋ/', vi: 'Lời chào hỏi', exEn: '"Good morning" is a polite greeting.', exVi: '"Chào buổi sáng" là một lời chào lịch sự.' },
+          { en: 'Vocabulary', ipa: '/vəˈkæb.jə.lər.i/', vi: 'Từ vựng', exEn: 'Learning five new vocabulary words a day is fun.', exVi: 'Học năm từ vựng mới mỗi ngày thật vui.' },
+          { en: 'Pronunciation', ipa: '/prəˌnʌn.siˈeɪ.ʃən/', vi: 'Phát âm', exEn: 'Listen and repeat to improve your pronunciation.', exVi: 'Nghe và lặp lại để cải thiện phát âm của em.' },
+          { en: 'Conversation', ipa: '/ˌkɒn.vəˈseɪ.ʃən/', vi: 'Hội thoại', exEn: 'Practice the conversation with your deskmate.', exVi: 'Thực hành đoạn hội thoại với bạn cùng bàn.' },
+          { en: 'Alphabet', ipa: '/ˈæl.fə.bet/', vi: 'Bảng chữ cái', exEn: 'The English alphabet has 26 letters.', exVi: 'Bảng chữ cái tiếng Anh có 26 chữ cái.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Listen and repeat after me, please.', vi: 'Các con hãy nghe và lặp lại theo cô/thầy nhé.' },
+          { role: 'Học sinh', en: 'How do you pronounce this word?', vi: 'Từ này phát âm như thế nào ạ?' },
+          { role: 'Giáo viên', en: 'Work in pairs and practice the dialogue.', vi: 'Các con làm việc theo cặp và luyện hội thoại nhé.' }
+        ],
+        quiz: [
+          { qEn: 'How many letters are in the English alphabet?', qVi: 'Bảng chữ cái tiếng Anh có bao nhiêu chữ cái?', opts: ['24', '25', '26', '29'], ans: 2, expEn: 'The English alphabet has 26 letters from A to Z.', expVi: 'Bảng chữ cái tiếng Anh có 26 chữ cái từ A đến Z.' },
+          { qEn: 'Which word means "Phát âm"?', qVi: 'Từ nào có nghĩa là "Phát âm"?', opts: ['Greeting', 'Pronunciation', 'Alphabet', 'Notebook'], ans: 1, expEn: 'Pronunciation refers to how a word is spoken.', expVi: 'Pronunciation là cách phát âm.' },
+          { qEn: 'When two friends talk to each other, they have a ___.', qVi: 'Khi hai người bạn nói chuyện với nhau, họ đang có một ___.', opts: ['Conversation', 'Subtraction', 'Triangle', 'Pencil'], ans: 0, expEn: 'A conversation is a talk between people.', expVi: 'Conversation là cuộc hội thoại.' }
+        ]
+      },
+
+      ethics: {
+        nameVi: 'Đạo đức', nameEn: 'Ethics', icon: '💖', color: 'pink', level: 'primary',
+        vocab: [
+          { en: 'Honesty', ipa: '/ˈɒn.ə.sti/', vi: 'Tính trung thực', exEn: 'Honesty means always telling the truth.', exVi: 'Trung thực nghĩa là luôn nói sự thật.' },
+          { en: 'Respect', ipa: '/rɪˈspekt/', vi: 'Sự tôn trọng', exEn: 'We show respect to our teachers and parents.', exVi: 'Chúng em thể hiện sự tôn trọng với thầy cô và cha mẹ.' },
+          { en: 'Kindness', ipa: '/ˈkaɪnd.nəs/', vi: 'Lòng tốt / Sự tử tế', exEn: 'Helping a friend in need is an act of kindness.', exVi: 'Giúp đỡ bạn khi khó khăn là một hành động tử tế.' },
+          { en: 'Responsibility', ipa: '/rɪˌspɒn.sɪˈbɪl.ə.ti/', vi: 'Trách nhiệm', exEn: 'Doing homework on time shows responsibility.', exVi: 'Làm bài tập đúng hạn thể hiện tinh thần trách nhiệm.' },
+          { en: 'Gratitude', ipa: '/ˈɡræt.ɪ.tʃuːd/', vi: 'Lòng biết ơn', exEn: 'Say "thank you" to express your gratitude.', exVi: 'Hãy nói "cảm ơn" để bày tỏ lòng biết ơn.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Always be kind and helpful to your classmates.', vi: 'Hãy luôn tử tế và giúp đỡ các bạn trong lớp nhé.' },
+          { role: 'Học sinh', en: 'I am sorry, I will be more careful next time.', vi: 'Em xin lỗi, lần sau em sẽ cẩn thận hơn ạ.' },
+          { role: 'Giáo viên', en: 'Thank you for telling the truth!', vi: 'Cảm ơn con vì đã nói thật nhé!' }
+        ],
+        quiz: [
+          { qEn: 'Always telling the truth is called ___.', qVi: 'Luôn nói sự thật được gọi là ___.', opts: ['Honesty', 'History', 'Art', 'Speed'], ans: 0, expEn: 'Honesty means being truthful.', expVi: 'Honesty nghĩa là tính trung thực.' },
+          { qEn: 'Saying "Thank you" shows your ___.', qVi: 'Nói lời "Cảm ơn" thể hiện điều gì của em?', opts: ['Anger', 'Gratitude', 'Silence', 'Hurry'], ans: 1, expEn: 'Gratitude is the feeling of being thankful.', expVi: 'Gratitude là lòng biết ơn.' }, 
+          { qEn: 'Who should we show respect to?', qVi: 'Chúng ta nên tôn trọng ai?', opts: ['Only ourselves', 'Nobody', 'Parents, teachers, and everyone', 'Only pets'], ans: 2, expEn: 'We should respect our parents, teachers, and everyone around us.', expVi: 'Chúng ta cần tôn trọng cha mẹ, thầy cô và mọi người xung quanh.' }
+        ]
+      },
+
+      nature_society: {
+        nameVi: 'Tự nhiên và Xã hội', nameEn: 'Nature & Society', icon: '🌿', color: 'emerald', level: 'primary',
+        vocab: [
+          { en: 'Plant', ipa: '/plɑːnt/', vi: 'Thực vật / Cây cối', exEn: 'A plant needs sunlight and water to grow.', exVi: 'Cây cối cần ánh nắng và nước để lớn lên.' },
+          { en: 'Season', ipa: '/ˈsiː.zən/', vi: 'Mùa trong năm', exEn: 'There are four seasons: spring, summer, autumn, and winter.', exVi: 'Có bốn mùa: xuân, hạ, thu và đông.' },
+          { en: 'Traffic light', ipa: '/ˈtræf.ɪk laɪt/', vi: 'Đèn giao thông', exEn: 'Stop when the traffic light turns red.', exVi: 'Dừng lại khi đèn giao thông chuyển màu đỏ.' },
+          { en: 'Community', ipa: '/kəˈmjuː.nə.ti/', vi: 'Cộng đồng', exEn: 'We keep our neighborhood community clean and green.', exVi: 'Chúng em giữ cho cộng đồng khu phố luôn xanh sạch.' },
+          { en: 'Weather', ipa: '/ˈweð.ər/', vi: 'Thời tiết', exEn: 'The weather today is sunny and warm.', exVi: 'Thời tiết hôm nay nắng và ấm áp.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'What do plants need to grow healthy?', vi: 'Cây cối cần gì để phát triển khỏe mạnh?' },
+          { role: 'Học sinh', en: 'They need water, sunlight, and soil!', vi: 'Cây cần nước, ánh sáng mặt trời và đất ạ!' },
+          { role: 'Giáo viên', en: 'Remember to obey traffic rules on your way home.', vi: 'Các con nhớ tuân thủ luật giao thông trên đường về nhà nhé.' }
+        ],
+        quiz: [
+          { qEn: 'What should you do when the traffic light is red?', qVi: 'Em nên làm gì khi đèn giao thông màu đỏ?', opts: ['Run fast', 'Stop and wait', 'Jump', 'Close eyes'], ans: 1, expEn: 'Red light means stop for safety.', expVi: 'Đèn đỏ có nghĩa là dừng lại để đảm bảo an toàn.' },
+          { qEn: 'What do plants need to grow?', qVi: 'Cây cối cần gì để lớn lên?', opts: ['Sunlight and water', 'Candy', 'Plastic', 'Toys'], ans: 0, expEn: 'Plants need sunlight, water, air, and soil.', expVi: 'Cây cần ánh sáng mặt trời, nước, không khí và đất.' },
+          { qEn: 'Spring, summer, autumn, and winter are four ___.', qVi: 'Xuân, hạ, thu, đông là bốn ___.', opts: ['Animals', 'Seasons', 'Streets', 'Colors'], ans: 1, expEn: 'They are the four seasons of the year.', expVi: 'Đó là bốn mùa (seasons) trong năm.' }
+        ]
+      },
+
+      science: {
+        nameVi: 'Khoa học', nameEn: 'Science', icon: '🔬', color: 'teal', level: 'primary',
+        vocab: [
+          { en: 'Water cycle', ipa: '/ˈwɔː.tər ˌsaɪ.kəl/', vi: 'Vòng tuần hoàn nước', exEn: 'Rain is an important part of the water cycle.', exVi: 'Mưa là một phần quan trọng của vòng tuần hoàn nước.' },
+          { en: 'Energy', ipa: '/ˈen.ə.dʒi/', vi: 'Năng lượng', exEn: 'Solar energy comes from the Sun.', exVi: 'Năng lượng mặt trời đến từ Mặt Trời.' },
+          { en: 'Oxygen', ipa: '/ˈɒk.sɪ.dʒən/', vi: 'Khí ô-xi', exEn: 'Humans and animals need oxygen to breathe.', exVi: 'Con người và động vật cần khí ô-xi để thở.' },
+          { en: 'Environment', ipa: '/ɪnˈvaɪ.rən.mənt/', vi: 'Môi trường', exEn: 'Planting trees helps protect the environment.', exVi: 'Trồng cây giúp bảo vệ môi trường.' },
+          { en: 'Mixture', ipa: '/ˈmɪks.tʃər/', vi: 'Hỗn hợp', exEn: 'Salt and water form a liquid mixture.', exVi: 'Muối và nước tạo thành một hỗn hợp lỏng.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Let’s observe what happens in this experiment.', vi: 'Hãy cùng quan sát xem điều gì xảy ra trong thí nghiệm này.' },
+          { role: 'Học sinh', en: 'The ice is melting into liquid water!', vi: 'Viên đá đang tan chảy thành nước lỏng ạ!' },
+          { role: 'Giáo viên', en: 'Write down your observations in your science notebook.', vi: 'Các em ghi lại kết quả quan sát vào vở Khoa học nhé.' }
+        ],
+        quiz: [
+          { qEn: 'Which gas do humans need to breathe?', qVi: 'Con người cần loại khí nào để hít thở?', opts: ['Oxygen', 'Plastic', 'Sand', 'Iron'], ans: 0, expEn: 'Humans breathe in oxygen to stay alive.', expVi: 'Con người cần hít thở khí ô-xi (oxygen).' },
+          { qEn: 'Where does solar energy come from?', qVi: 'Năng lượng mặt trời đến từ đâu?', opts: ['The Moon', 'The Sun', 'A battery', 'The ocean'], ans: 1, expEn: 'Solar means related to the Sun.', expVi: 'Solar energy là năng lượng từ Mặt Trời (The Sun).' },
+          { qEn: 'How can we help protect the environment?', qVi: 'Chúng ta có thể bảo vệ môi trường bằng cách nào?', opts: ['Throwing trash', 'Wasting water', 'Planting trees and recycling', 'Cutting all forests'], ans: 2, expEn: 'Planting trees and recycling keep the Earth clean.', expVi: 'Trồng cây và tái chế giúp Trái Đất xanh sạch.' }
+        ]
+      },
+
+      hist_geo_p: {
+        nameVi: 'Lịch sử và Địa lí', nameEn: 'History & Geography', icon: '🗺️', color: 'amber', level: 'primary',
+        vocab: [
+          { en: 'Map', ipa: '/mæp/', vi: 'Bản đồ', exEn: 'Look at the map of Vietnam to find Hanoi.', exVi: 'Hãy nhìn bản đồ Việt Nam để tìm thủ đô Hà Nội.' },
+          { en: 'Capital', ipa: '/ˈkæp.ɪ.təl/', vi: 'Thủ đô', exEn: 'Hanoi is the capital of Vietnam.', exVi: 'Hà Nội là thủ đô của Việt Nam.' },
+          { en: 'River', ipa: '/ˈrɪv.ər/', vi: 'Dòng sông', exEn: 'The Red River flows through northern Vietnam.', exVi: 'Sông Hồng chảy qua miền Bắc Việt Nam.' },
+          { en: 'Heritage', ipa: '/ˈher.ɪ.tɪdʒ/', vi: 'Di sản', exEn: 'Ha Long Bay is a World Natural Heritage site.', exVi: 'Vịnh Hạ Long là Di sản Thiên nhiên Thế giới.' },
+          { en: 'Hero', ipa: '/ˈhɪə.rəʊ/', vi: 'Anh hùng', exEn: 'We learn about national heroes in History class.', exVi: 'Chúng em học về các anh hùng dân tộc trong giờ Lịch sử.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Can you locate the Red River Delta on the map?', vi: 'Em có thể chỉ vị trí Đồng bằng sông Hồng trên bản đồ không?' },
+          { role: 'Học sinh', en: 'Yes, it is in the north of Vietnam.', vi: 'Dạ có, nó nằm ở phía Bắc Việt Nam ạ.' },
+          { role: 'Giáo viên', en: 'We should be proud of our national heritage.', vi: 'Chúng ta hãy luôn tự hào về di sản dân tộc mình.' }
+        ],
+        quiz: [
+          { qEn: 'What is the capital of Vietnam?', qVi: 'Thủ đô của Việt Nam là thành phố nào?', opts: ['Da Nang', 'Hanoi', 'Hue', 'Can Tho'], ans: 1, expEn: 'Hanoi is the capital city of Vietnam.', expVi: 'Hà Nội (Hanoi) là thủ đô của Việt Nam.' },
+          { qEn: 'Which tool helps us find places and countries?', qVi: 'Công cụ nào giúp chúng ta tìm vị trí các địa danh và quốc gia?', opts: ['A map', 'A flute', 'A spoon', 'A ball'], ans: 0, expEn: 'A map shows geographical locations.', expVi: 'Bản đồ (Map) giúp xác định vị trí địa lí.' },
+          { qEn: 'Ha Long Bay is a famous World Natural ___.', qVi: 'Vịnh Hạ Long là một ___ Thiên nhiên Thế giới nổi tiếng.', opts: ['Homework', 'Heritage', 'Pencil', 'Sport'], ans: 1, expEn: 'Ha Long Bay is recognized as a World Natural Heritage site.', expVi: 'Heritage nghĩa là di sản.' }
+        ]
+      },
+
+      informatics_p: {
+        nameVi: 'Tin học', nameEn: 'Informatics', icon: '💻', color: 'cyan', level: 'primary',
+        vocab: [
+          { en: 'Keyboard', ipa: '/ˈkiː.bɔːd/', vi: 'Bàn phím', exEn: 'Use the keyboard to type your name.', exVi: 'Dùng bàn phím để gõ tên của em.' },
+          { en: 'Mouse', ipa: '/maʊs/', vi: 'Chuột máy tính', exEn: 'Click the left button on the mouse.', exVi: 'Nhấn nút trái trên chuột máy tính.' },
+          { en: 'Folder', ipa: '/ˈfəʊl.dər/', vi: 'Thư mục', exEn: 'Save your drawing inside your personal folder.', exVi: 'Lưu bức tranh của em vào trong thư mục cá nhân.' },
+          { en: 'Password', ipa: '/ˈpɑːs.wɜːd/', vi: 'Mật khẩu', exEn: 'Never share your password with strangers.', exVi: 'Không bao giờ chia sẻ mật khẩu với người lạ.' },
+          { en: 'Internet', ipa: '/ˈɪn.tə.net/', vi: 'Mạng Internet', exEn: 'We use the Internet safely to find information.', exVi: 'Chúng em sử dụng Internet an toàn để tìm thông tin.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Please turn on your computer and open the folder.', vi: 'Các con bật máy tính và mở thư mục ra nhé.' },
+          { role: 'Học sinh', en: 'Teacher, I finished typing my document!', vi: 'Thưa thầy/cô, con đã gõ xong văn bản rồi ạ!' },
+          { role: 'Giáo viên', en: 'Don’t forget to click Save before closing.', vi: 'Đừng quên nhấn Lưu (Save) trước khi tắt nhé.' }
+        ],
+        quiz: [
+          { qEn: 'Which device do we use to type letters and numbers?', qVi: 'Thiết bị nào dùng để gõ chữ và số?', opts: ['Speaker', 'Keyboard', 'Chair', 'Lamp'], ans: 1, expEn: 'The keyboard is used for typing.', expVi: 'Bàn phím (Keyboard) dùng để gõ chữ và số.' },
+          { qEn: 'Should you share your secret password online?', qVi: 'Em có nên chia sẻ mật khẩu bí mật lên mạng không?', opts: ['Yes, with everyone', 'No, keep it secret', 'Write it on the wall', 'Send to strangers'], ans: 1, expEn: 'Keep your password private for online safety.', expVi: 'Luôn giữ bí mật mật khẩu để an toàn trên mạng.' },
+          { qEn: 'Where do we organize and store files on a computer?', qVi: 'Chúng ta sắp xếp và lưu trữ tệp tin trong đâu trên máy tính?', opts: ['A folder', 'A shoe', 'A cup', 'A window'], ans: 0, expEn: 'Folders help organize digital files neatly.', expVi: 'Thư mục (Folder) dùng để chứa và sắp xếp tệp tin.' }
+        ]
+      },
+
+      technology_p: {
+        nameVi: 'Công nghệ', nameEn: 'Technology', icon: '🛠️', color: 'orange', level: 'primary',
+        vocab: [
+          { en: 'Scissors', ipa: '/ˈsɪz.əz/', vi: 'Cái kéo', exEn: 'Be careful when cutting paper with scissors.', exVi: 'Hãy cẩn thận khi cắt giấy bằng kéo.' },
+          { en: 'Model', ipa: '/ˈmɒd.əl/', vi: 'Mô hình', exEn: 'We built a small paper model of a house.', exVi: 'Chúng em đã làm một mô hình ngôi nhà nhỏ bằng giấy.' },
+          { en: 'Flowerpot', ipa: '/ˈflaʊə.pɒt/', vi: 'Chậu hoa', exEn: 'Plant the seeds gently in the flowerpot.', exVi: 'Gieo hạt nhẹ nhàng vào chậu hoa.' },
+          { en: 'Light bulb', ipa: '/ˈlaɪt bʌlb/', vi: 'Bóng đèn', exEn: 'Turn off the light bulb when leaving the room.', exVi: 'Tắt bóng đèn khi rời khỏi phòng.' },
+          { en: 'Safety', ipa: '/ˈseɪf.ti/', vi: 'Sự an toàn', exEn: 'Electrical safety is very important at home.', exVi: 'An toàn điện ở nhà rất quan trọng.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Today we will assemble a simple toy car model.', vi: 'Hôm nay chúng ta sẽ lắp ghép mô hình ô tô đồ chơi đơn giản.' },
+          { role: 'Học sinh', en: 'Can I borrow the glue and ruler, please?', vi: 'Cho tớ mượn hồ dán và thước kẻ được không?' },
+          { role: 'Giáo viên', en: 'Clean up your desk after crafting.', vi: 'Các con dọn sạch bàn học sau khi làm thủ công nhé.' }
+        ],
+        quiz: [
+          { qEn: 'What tool do we use to cut paper?', qVi: 'Dụng cụ nào dùng để cắt giấy?', opts: ['Scissors', 'Light bulb', 'Pillow', 'Clock'], ans: 0, expEn: 'Scissors are used for cutting paper or cloth.', expVi: 'Scissors là cái kéo.' },
+          { qEn: 'To save electricity, turn off the ___ when leaving a room.', qVi: 'Để tiết kiệm điện, hãy tắt ___ khi ra khỏi phòng.', opts: ['Flowerpot', 'Light bulb', 'Scissors', 'Paper'], ans: 1, expEn: 'Turning off the light bulb saves energy.', expVi: 'Tắt bóng đèn (light bulb) giúp tiết kiệm điện.' },
+          { qEn: 'Which word means "Sự an toàn"?', qVi: 'Từ nào có nghĩa là "Sự an toàn"?', opts: ['Model', 'Safety', 'Glue', 'Desk'], ans: 1, expEn: 'Safety means being protected from danger.', expVi: 'Safety có nghĩa là sự an toàn.' }
+        ]
+      },
+
+      pe_p: {
+        nameVi: 'Giáo dục thể chất', nameEn: 'Physical Education', icon: '⚽', color: 'lime', level: 'primary',
+        vocab: [
+          { en: 'Warm-up', ipa: '/ˈwɔːm.ʌp/', vi: 'Khởi động', exEn: 'Always do a warm-up before running.', exVi: 'Luôn khởi động trước khi chạy.' },
+          { en: 'Jump', ipa: '/dʒʌmp/', vi: 'Nhảy', exEn: 'Jump rope is great for your heart.', exVi: 'Nhảy dây rất tốt cho tim mạch của em.' },
+          { en: 'Teamwork', ipa: '/ˈtiːm.wɜːk/', vi: 'Tinh thần đồng đội', exEn: 'Good teamwork helps us win the relay race.', exVi: 'Tinh thần đồng đội tốt giúp chúng em thắng cuộc chạy tiếp sức.' },
+          { en: 'Stretch', ipa: '/stretʃ/', vi: 'Giãn cơ / Vươn vai', exEn: 'Stretch your arms up high to the sky.', exVi: 'Vươn hai tay lên cao hướng về bầu trời.' },
+          { en: 'Healthy', ipa: '/ˈhel.θi/', vi: 'Khỏe mạnh', exEn: 'Daily exercise keeps our body strong and healthy.', exVi: 'Tập thể dục hằng ngày giúp cơ thể khỏe mạnh.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Line up in two rows and get ready to warm up!', vi: 'Xếp thành hai hàng và chuẩn bị khởi động nào!' },
+          { role: 'Học sinh', en: 'One, two, three, four! Stretch to the left!', vi: 'Một, hai, ba, bốn! Nghiêng người sang trái!' },
+          { role: 'Giáo viên', en: 'Great teamwork, everyone! Drink some water now.', vi: 'Tinh thần đồng đội rất tuyệt! Các con uống chút nước nhé.' }
+        ],
+        quiz: [
+          { qEn: 'What should we do before playing sports to avoid injury?', qVi: 'Chúng ta nên làm gì trước khi chơi thể thao để tránh chấn thương?', opts: ['Warm-up', 'Sleep', 'Eat lots of candy', 'Sit still'], ans: 0, expEn: 'A warm-up prepares your muscles for exercise.', expVi: 'Khởi động (Warm-up) giúp làm nóng cơ thể và tránh chấn thương.' },
+          { qEn: 'Working together with teammates is called ___.', qVi: 'Phối hợp cùng đồng đội được gọi là ___.', opts: ['Teamwork', 'Homework', 'Drawing', 'Reading'], ans: 0, expEn: 'Teamwork means cooperating as a team.', expVi: 'Teamwork là tinh thần đồng đội.' },
+          { qEn: 'Daily exercise helps you stay ___.', qVi: 'Tập thể dục hằng ngày giúp em luôn ___.', opts: ['Tired', 'Healthy', 'Sad', 'Late'], ans: 1, expEn: 'Exercise makes your body healthy and strong.', expVi: 'Healthy nghĩa là khỏe mạnh.' }
+        ]
+      },
+
+      music: {
+        nameVi: 'Âm nhạc', nameEn: 'Music', icon: '🎵', color: 'violet', level: 'primary',
+        vocab: [
+          { en: 'Melody', ipa: '/ˈmel.ə.di/', vi: 'Giai điệu', exEn: 'This children’s song has a cheerful melody.', exVi: 'Bài hát thiếu nhi này có giai điệu vui tươi.' },
+          { en: 'Rhythm', ipa: '/ˈrɪð.əm/', vi: 'Nhịp điệu', exEn: 'Clap your hands to the rhythm of the drum.', exVi: 'Vỗ tay theo nhịp điệu của tiếng trống.' },
+          { en: 'Musical note', ipa: '/ˈmjuː.zɪ.kəl nəʊt/', vi: 'Nốt nhạc', exEn: 'Do, Re, Mi, Fa, Sol, La, Si are musical notes.', exVi: 'Đô, Rê, Mi, Pha, Son, La, Si là các nốt nhạc.' },
+          { en: 'Chorus', ipa: '/ˈkɔː.rəs/', vi: 'Điệp khúc / Dàn đồng ca', exEn: 'Let’s sing the chorus together loudly.', exVi: 'Hãy cùng hát vang đoạn điệp khúc nào.' },
+          { en: 'Instrument', ipa: '/ˈɪn.strə.mənt/', vi: 'Nhạc cụ', exEn: 'The recorder and drum are classroom instruments.', exVi: 'Sáo recorder và trống là các nhạc cụ trong lớp học.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Let’s clap our hands and follow the rhythm!', vi: 'Chúng ta cùng vỗ tay và theo nhịp điệu nào!' },
+          { role: 'Học sinh', en: 'I love singing this song with my friends.', vi: 'Em rất thích hát bài này cùng các bạn.' },
+          { role: 'Giáo viên', en: 'One, two, three – sing together!', vi: 'Một, hai, ba – cùng hát nào!' }
+        ],
+        quiz: [
+          { qEn: 'Do, Re, Mi, Fa, Sol are examples of ___.', qVi: 'Đô, Rê, Mi, Pha, Son là ví dụ về ___.', opts: ['Musical notes', 'Numbers', 'Colors', 'Animals'], ans: 0, expEn: 'They are musical notes.', expVi: 'Đó là các nốt nhạc (musical notes).' },
+          { qEn: 'A guitar, piano, or drum is a musical ___.', qVi: 'Đàn ghi-ta, pi-a-nô hay trống là một ___.', opts: ['Vegetable', 'Instrument', 'Planet', 'Shape'], ans: 1, expEn: 'An instrument is an object used to make music.', expVi: 'Instrument nghĩa là nhạc cụ.' },
+          { qEn: 'Which word means "Giai điệu"?', qVi: 'Từ nào có nghĩa là "Giai điệu"?', opts: ['Melody', 'Map', 'Mouse', 'Model'], ans: 0, expEn: 'Melody is the tune of a song.', expVi: 'Melody có nghĩa là giai điệu.' }
+        ]
+      },
+
+      art: {
+        nameVi: 'Mĩ thuật', nameEn: 'Fine Arts', icon: '🎨', color: 'fuchsia', level: 'primary',
+        vocab: [
+          { en: 'Primary color', ipa: '/ˈpraɪ.mə.ri ˈkʌl.ər/', vi: 'Màu cơ bản', exEn: 'Red, yellow, and blue are primary colors.', exVi: 'Đỏ, vàng và xanh lam là ba màu cơ bản.' },
+          { en: 'Paintbrush', ipa: '/ˈpeɪnt.brʌʃ/', vi: 'Cọ vẽ', exEn: 'Wash your paintbrush before changing colors.', exVi: 'Rửa sạch cọ vẽ trước khi đổi màu khác.' },
+          { en: 'Sketch', ipa: '/sketʃ/', vi: 'Phác thảo', exEn: 'Draw a light pencil sketch first.', exVi: 'Hãy vẽ một nét phác thảo nhẹ bằng bút chì trước.' },
+          { en: 'Landscape', ipa: '/ˈlænd.skeɪp/', vi: 'Tranh phong cảnh', exEn: 'She painted a beautiful countryside landscape.', exVi: 'Bạn ấy đã vẽ một bức tranh phong cảnh làng quê tuyệt đẹp.' },
+          { en: 'Sculpture', ipa: '/ˈskʌlp.tʃər/', vi: 'Điêu khắc / Nặn tượng', exEn: 'We made clay animals in sculpture class.', exVi: 'Chúng em nặn các con vật bằng đất sét trong giờ tạo hình.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Mix blue and yellow to make green!', vi: 'Pha màu xanh lam với màu vàng để tạo ra màu xanh lá nhé!' },
+          { role: 'Học sinh', en: 'Look at my landscape painting of my hometown!', vi: 'Thầy/cô xem bức tranh phong cảnh quê em này!' },
+          { role: 'Giáo viên', en: 'Be creative and use bright colors.', vi: 'Hãy sáng tạo và dùng những màu sắc tươi sáng nhé.' }
+        ],
+        quiz: [
+          { qEn: 'What color do you get when you mix blue and yellow?', qVi: 'Pha màu xanh lam và màu vàng sẽ ra màu gì?', opts: ['Purple', 'Green', 'Orange', 'Black'], ans: 1, expEn: 'Blue + Yellow = Green.', expVi: 'Xanh lam + Vàng = Xanh lá cây (Green).' },
+          { qEn: 'A painting of mountains, rivers, and trees is a ___.', qVi: 'Bức tranh vẽ núi non, sông ngòi, cây cối gọi là ___.', opts: ['Landscape', 'Keyboard', 'Fraction', 'Chorus'], ans: 0, expEn: 'Landscape means scenery of nature.', expVi: 'Landscape là tranh phong cảnh.' },
+          { qEn: 'Which tool do artists use to apply watercolor?', qVi: 'Họa sĩ dùng dụng cụ nào để tô màu nước?', opts: ['Paintbrush', 'Scissors', 'Ruler', 'Compass'], ans: 0, expEn: 'A paintbrush is used for painting.', expVi: 'Paintbrush là cây cọ vẽ.' }
+        ]
+      },
+
+      experiential: {
+        nameVi: 'Hoạt động trải nghiệm', nameEn: 'Experiential Activities', icon: '🎒', color: 'yellow', level: 'primary',
+        vocab: [
+          { en: 'Field trip', ipa: '/ˈfiːld trɪp/', vi: 'Chuyến tham quan thực tế', exEn: 'Our class is going on a field trip to the museum.', exVi: 'Lớp chúng em sắp đi tham quan thực tế tại bảo tàng.' },
+          { en: 'Recycle', ipa: '/ˌriːˈsaɪ.kəl/', vi: 'Tái chế', exEn: 'We recycle plastic bottles to make pen holders.', exVi: 'Chúng em tái chế chai nhựa để làm ống đựng bút.' },
+          { en: 'Volunteer', ipa: '/ˌvɒl.ənˈtɪər/', vi: 'Tình nguyện', exEn: 'Students volunteer to clean the school yard.', exVi: 'Học sinh tình nguyện dọn dẹp sân trường.' },
+          { en: 'Festival', ipa: '/ˈfes.tɪ.vəl/', vi: 'Lễ hội', exEn: 'We make lanterns for the Mid-Autumn Festival.', exVi: 'Chúng em làm đèn lồng cho Tết Trung thu.' },
+          { en: 'Skill', ipa: '/skɪl/', vi: 'Kĩ năng', exEn: 'Cooking simple food is a useful life skill.', exVi: 'Nấu những món ăn đơn giản là một kĩ năng sống hữu ích.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Let’s share what you learned from today’s activity.', vi: 'Hãy chia sẻ điều con học được qua hoạt động hôm nay nhé.' },
+          { role: 'Học sinh', en: 'I learned how to sort trash and recycle paper!', vi: 'Con đã học được cách phân loại rác và tái chế giấy ạ!' },
+          { role: 'Giáo viên', en: 'Remember to stay with your group during the field trip.', vi: 'Các con nhớ đi theo nhóm trong chuyến tham quan nhé.' }
+        ],
+        quiz: [
+          { qEn: 'Turning old plastic bottles into useful items is called ___.', qVi: 'Biến chai nhựa cũ thành đồ dùng hữu ích gọi là ___.', opts: ['Recycle', 'Forget', 'Throw away', 'Hide'], ans: 0, expEn: 'Recycling gives waste materials a new life.', expVi: 'Recycle nghĩa là tái chế.' },
+          { qEn: 'A school visit to a farm or museum is a ___.', qVi: 'Chuyến đi thăm nông trại hay bảo tàng của trường là ___.', opts: ['Field trip', 'Nap', 'Test', 'Poem'], ans: 0, expEn: 'A field trip lets students learn outside the classroom.', expVi: 'Field trip là chuyến tham quan trải nghiệm.' },
+          { qEn: 'Which word means "Kĩ năng"?', qVi: 'Từ nào có nghĩa là "Kĩ năng"?', opts: ['Skill', 'Season', 'Song', 'Sketch'], ans: 0, expEn: 'Skill means the ability to do something well.', expVi: 'Skill là kĩ năng.' }
+        ]
+      },
+
+      /* -------------------- CÁC MÔN CẤP THCS (LỚP 6 - 9) -------------------- */
+      math_s: {
+        nameVi: 'Toán', nameEn: 'Mathematics', icon: '📐', color: 'sky', level: 'secondary',
+        vocab: [
+          { en: 'Equation', ipa: '/ɪˈkweɪ.ʒən/', vi: 'Phương trình', exEn: 'Solve the linear equation to find the value of x.', exVi: 'Giải phương trình bậc nhất để tìm giá trị của x.' },
+          { en: 'Integer', ipa: '/ˈɪn.tɪ.dʒər/', vi: 'Số nguyên', exEn: 'Negative three, zero, and five are integers.', exVi: 'Âm ba, không và năm là các số nguyên.' },
+          { en: 'Geometry', ipa: '/dʒiˈɒm.ə.tri/', vi: 'Hình học', exEn: 'We study angles and triangles in Geometry.', exVi: 'Chúng ta học về các góc và tam giác trong môn Hình học.' },
+          { en: 'Probability', ipa: '/ˌprɒb.əˈbɪl.ə.ti/', vi: 'Xác suất', exEn: 'What is the probability of rolling a six on a die?', exVi: 'Xác suất gieo được mặt sáu chấm trên con xúc xắc là bao nhiêu?' },
+          { en: 'Hypotenuse', ipa: '/haɪˈpɒt.ən.juːz/', vi: 'Cạnh huyền', exEn: 'The hypotenuse is the longest side of a right triangle.', exVi: 'Cạnh huyền là cạnh dài nhất của tam giác vuông.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Apply the Pythagorean theorem to calculate the hypotenuse.', vi: 'Hãy áp dụng định lí Py-ta-go để tính cạnh huyền.' },
+          { role: 'Học sinh', en: 'Could you explain step two of this equation again?', vi: 'Thầy/cô có thể giảng lại bước hai của phương trình này không ạ?' },
+          { role: 'Giáo viên', en: 'Check whether your solution satisfies the condition.', vi: 'Kiểm tra xem nghiệm của em có thỏa mãn điều kiện không nhé.' }
+        ],
+        quiz: [
+          { qEn: 'What is the longest side of a right-angled triangle called?', qVi: 'Cạnh dài nhất của tam giác vuông gọi là gì?', opts: ['Radius', 'Hypotenuse', 'Diameter', 'Chord'], ans: 1, expEn: 'The hypotenuse is opposite the 90-degree angle.', expVi: 'Cạnh huyền (Hypotenuse) đối diện với góc vuông.' },
+          { qEn: 'Which of the following is an integer?', qVi: 'Số nào sau đây là một số nguyên (integer)?', opts: ['2.5', '1/3', '-7', '0.75'], ans: 2, expEn: '-7 is a whole negative number, so it is an integer.', expVi: '-7 là số nguyên âm, thuộc tập hợp số nguyên.' },
+          { qEn: 'In "2x + 4 = 10", what is this mathematical statement called?', qVi: 'Trong "2x + 4 = 10", biểu thức có dấu bằng này gọi là gì?', opts: ['An equation', 'A polygon', 'A compass', 'A graph'], ans: 0, expEn: 'An equation shows that two expressions are equal.', expVi: 'Equation nghĩa là phương trình.' }
+        ]
+      },
+
+      literature: {
+        nameVi: 'Ngữ văn', nameEn: 'Literature', icon: '📚', color: 'rose', level: 'secondary',
+        vocab: [
+          { en: 'Metaphor', ipa: '/ˈmet.ə.fər/', vi: 'Phép ẩn dụ', exEn: 'The poet used a metaphor to compare time to a river.', exVi: 'Nhà thơ dùng phép ẩn dụ để so sánh thời gian với dòng sông.' },
+          { en: 'Protagonist', ipa: '/prəˈtæɡ.ən.ɪst/', vi: 'Nhân vật chính', exEn: 'De Men is the brave protagonist of the novel.', exVi: 'Dế Mèn là nhân vật chính dũng cảm của tác phẩm.' },
+          { en: 'Argumentative essay', ipa: '/ˌɑːɡ.jəˈmen.tə.tɪv ˈes.eɪ/', vi: 'Bài văn nghị luận', exEn: 'Provide clear evidence in your argumentative essay.', exVi: 'Hãy đưa ra dẫn chứng rõ ràng trong bài văn nghị luận.' },
+          { en: 'Theme', ipa: '/θiːm/', vi: 'Chủ đề tác phẩm', exEn: 'Patriotism is a central theme in Vietnamese literature.', exVi: 'Lòng yêu nước là chủ đề xuyên suốt trong văn học Việt Nam.' },
+          { en: 'Rhetorical device', ipa: '/rɪˈtɒr.ɪ.kəl dɪˈvaɪs/', vi: 'Biện pháp tu từ', exEn: 'Identify the rhetorical device used in the opening stanza.', exVi: 'Xác định biện pháp tu từ được sử dụng trong khổ thơ mở đầu.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'What message is the author trying to convey?', vi: 'Tác giả muốn truyền tải thông điệp gì?' },
+          { role: 'Học sinh', en: 'I think the theme highlights family love and sacrifice.', vi: 'Em nghĩ chủ đề đề cao tình cảm gia đình và sự hi sinh.' },
+          { role: 'Giáo viên', en: 'Support your opinion with quotes from the text.', vi: 'Hãy chứng minh ý kiến của em bằng dẫn chứng từ văn bản.' }
+        ],
+        quiz: [
+          { qEn: 'What do we call the main character in a story?', qVi: 'Nhân vật chính trong một câu chuyện được gọi là gì?', opts: ['Protagonist', 'Metaphor', 'Stanza', 'Dictionary'], ans: 0, expEn: 'The protagonist is the leading character.', expVi: 'Protagonist là nhân vật chính.' },
+          { qEn: 'Which term refers to the central message or topic of a literary work?', qVi: 'Thuật ngữ nào chỉ chủ đề/thông điệp trung tâm của tác phẩm?', opts: ['Comma', 'Theme', 'Margin', 'Cover'], ans: 1, expEn: 'The theme is the underlying idea of a story or poem.', expVi: 'Theme là chủ đề tác phẩm.' },
+          { qEn: 'Simile and metaphor are examples of ___.', qVi: 'So sánh và ẩn dụ là ví dụ về ___.', opts: ['Rhetorical devices', 'Equations', 'Chemicals', 'Maps'], ans: 0, expEn: 'Rhetorical devices make writing more vivid and expressive.', expVi: 'Rhetorical devices là các biện pháp tu từ.' }
+        ]
+      },
+
+      english_s: {
+        nameVi: 'Tiếng Anh', nameEn: 'English', icon: '🌍', color: 'indigo', level: 'secondary',
+        vocab: [
+          { en: 'Fluency', ipa: '/ˈfluː.ən.si/', vi: 'Sự trôi chảy', exEn: 'Speaking English daily improves your fluency.', exVi: 'Nói tiếng Anh hằng ngày giúp cải thiện sự trôi chảy.' },
+          { en: 'Comprehension', ipa: '/ˌkɒm.prɪˈhen.ʃən/', vi: 'Kĩ năng đọc/nghe hiểu', exEn: 'Skimming helps you succeed in reading comprehension.', exVi: 'Đọc lướt giúp em làm tốt bài đọc hiểu.' },
+          { en: 'Presentation', ipa: '/ˌprez.ənˈteɪ.ʃən/', vi: 'Bài thuyết trình', exEn: 'Our group gave a presentation on green cities.', exVi: 'Nhóm chúng em đã thuyết trình về các thành phố xanh.' },
+          { en: 'Context clue', ipa: '/ˈkɒn.tekst kluː/', vi: 'Gợi ý từ ngữ cảnh', exEn: 'Use context clues to guess unfamiliar words.', exVi: 'Dùng gợi ý từ ngữ cảnh để đoán nghĩa từ mới.' },
+          { en: 'Debate', ipa: '/dɪˈbeɪt/', vi: 'Tranh biện', exEn: 'We held a lively debate on using AI in education.', exVi: 'Chúng em đã tổ chức buổi tranh biện sôi nổi về AI trong giáo dục.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Let’s brainstorm ideas before giving your presentation.', vi: 'Hãy động não tìm ý tưởng trước khi thuyết trình nhé.' },
+          { role: 'Học sinh', en: 'In my perspective, learning English opens global opportunities.', vi: 'Theo quan điểm của em, học tiếng Anh mở ra cơ hội toàn cầu.' },
+          { role: 'Giáo viên', en: 'Try to paraphrase this sentence in your own words.', vi: 'Hãy thử diễn đạt lại câu này bằng ngôn từ của chính em.' }
+        ],
+        quiz: [
+          { qEn: 'What helps you guess the meaning of a new word while reading?', qVi: 'Điều gì giúp em đoán nghĩa từ mới khi đang đọc bài?', opts: ['Context clues', 'Guessing blindly', 'Skipping the page', 'Closing the book'], ans: 0, expEn: 'Context clues in surrounding sentences reveal word meanings.', expVi: 'Context clues là gợi ý từ ngữ cảnh xung quanh.' },
+          { qEn: 'The ability to speak a language smoothly and naturally is ___.', qVi: 'Khả năng nói một ngôn ngữ trôi chảy, tự nhiên gọi là ___.', opts: ['Fluency', 'Gravity', 'Density', 'Battery'], ans: 0, expEn: 'Fluency refers to smooth, effortless communication.', expVi: 'Fluency là sự trôi chảy.' },
+          { qEn: 'A formal discussion where two sides argue opposing views is a ___.', qVi: 'Cuộc thảo luận chính thức nơi hai bên bảo vệ quan điểm đối lập là ___.', opts: ['Debate', 'Recipe', 'Lullaby', 'Sketch'], ans: 0, expEn: 'Debate builds critical thinking and speaking skills.', expVi: 'Debate là tranh biện.' }
+        ]
+      },
+
+      civic: {
+        nameVi: 'Giáo dục công dân', nameEn: 'Civic Education', icon: '⚖️', color: 'blue', level: 'secondary',
+        vocab: [
+          { en: 'Citizen', ipa: '/ˈsɪt.ɪ.zən/', vi: 'Công dân', exEn: 'Every citizen has both rights and duties.', exVi: 'Mỗi công dân đều có cả quyền lợi và nghĩa vụ.' },
+          { en: 'Law', ipa: '/lɔː/', vi: 'Pháp luật', exEn: 'Obeying the law creates a safe and fair society.', exVi: 'Tuân thủ pháp luật tạo nên một xã hội an toàn và công bằng.' },
+          { en: 'Equality', ipa: '/iˈkwɒl.ə.ti/', vi: 'Sự bình đẳng', exEn: 'Gender equality ensures fair opportunities for all.', exVi: 'Bình đẳng giới đảm bảo cơ hội công bằng cho tất cả mọi người.' },
+          { en: 'Cyberbullying', ipa: '/ˈsaɪ.bəˌbʊl.i.ɪŋ/', vi: 'Bắt nạt trên mạng', exEn: 'We must speak up and stop cyberbullying.', exVi: 'Chúng ta cần lên tiếng và ngăn chặn bắt nạt trên mạng.' },
+          { en: 'Budget', ipa: '/ˈbʌdʒ.ɪt/', vi: 'Ngân sách / Kế hoạch chi tiêu', exEn: 'Planning a monthly budget teaches smart financial habits.', exVi: 'Lập kế hoạch chi tiêu hằng tháng giúp hình thành thói quen tài chính thông minh.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'How can students become responsible digital citizens?', vi: 'Học sinh có thể trở thành công dân số có trách nhiệm bằng cách nào?' },
+          { role: 'Học sinh', en: 'We should verify information and treat others with respect online.', vi: 'Chúng em nên kiểm chứng thông tin và tôn trọng mọi người trên mạng.' },
+          { role: 'Giáo viên', en: 'Know your rights and fulfill your civic duties.', vi: 'Hãy hiểu rõ quyền lợi và thực hiện tốt nghĩa vụ công dân.' }
+        ],
+        quiz: [
+          { qEn: 'Treating everyone fairly regardless of background is called ___.', qVi: 'Đối xử công bằng với mọi người không phân biệt xuất thân gọi là ___.', opts: ['Equality', 'Gravity', 'Melody', 'Friction'], ans: 0, expEn: 'Equality means equal rights and opportunities.', expVi: 'Equality là sự bình đẳng.' },
+          { qEn: 'What should you do if you witness cyberbullying?', qVi: 'Em nên làm gì nếu chứng kiến hành vi bắt nạt trên mạng?', opts: ['Join in', 'Report it and support the victim', 'Share it widely', 'Ignore forever'], ans: 1, expEn: 'Reporting and supporting helps stop cyberbullying.', expVi: 'Cần báo cáo với người lớn/thầy cô và hỗ trợ nạn nhân.' },
+          { qEn: 'A plan for managing money and spending wisely is a ___.', qVi: 'Kế hoạch quản lí tiền bạc và chi tiêu hợp lí gọi là ___.', opts: ['Budget', 'Poem', 'Cell', 'Compass'], ans: 0, expEn: 'A budget helps track income and expenses.', expVi: 'Budget là ngân sách / kế hoạch chi tiêu.' }
+        ]
+      },
+
+      natural_science: {
+        nameVi: 'Khoa học tự nhiên', nameEn: 'Natural Sciences', icon: '🧪', color: 'teal', level: 'secondary',
+        vocab: [
+          { en: 'Cell', ipa: '/sel/', vi: 'Tế bào', exEn: 'The cell is the basic structural unit of all living organisms.', exVi: 'Tế bào là đơn vị cấu trúc cơ bản của mọi cơ thể sống.' },
+          { en: 'Photosynthesis', ipa: '/ˌfəʊ.təʊˈsɪn.θə.sɪs/', vi: 'Quá trình quang hợp', exEn: 'Green plants make food through photosynthesis.', exVi: 'Cây xanh tạo ra chất dinh dưỡng nhờ quá trình quang hợp.' },
+          { en: 'Gravity', ipa: '/ˈɡræv.ə.ti/', vi: 'Trọng lực / Lực hấp dẫn', exEn: 'Earth’s gravity keeps us firmly on the ground.', exVi: 'Trọng lực của Trái Đất giữ chúng ta đứng vững trên mặt đất.' },
+          { en: 'Chemical reaction', ipa: '/ˈkem.ɪ.kəl riˈæk.ʃən/', vi: 'Phản ứng hóa học', exEn: 'Rusting iron is an example of a chemical reaction.', exVi: 'Sắt bị gỉ là một ví dụ về phản ứng hóa học.' },
+          { en: 'Ecosystem', ipa: '/ˈiː.kəʊˌsɪs.təm/', vi: 'Hệ sinh thái', exEn: 'Coral reefs form a rich marine ecosystem.', exVi: 'Rạn san hô tạo nên một hệ sinh thái biển phong phú.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Put on your safety goggles before starting the lab experiment.', vi: 'Đeo kính bảo hộ trước khi bắt đầu thí nghiệm nhé.' },
+          { role: 'Học sinh', en: 'We observed plant cells clearly under the microscope!', vi: 'Chúng em đã quan sát rất rõ tế bào thực vật dưới kính hiển vi!' },
+          { role: 'Giáo viên', en: 'Record your hypothesis and compare it with the result.', vi: 'Ghi lại giả thuyết và so sánh với kết quả thí nghiệm.' }
+        ],
+        quiz: [
+          { qEn: 'What is the basic building block of all living things?', qVi: 'Đơn vị cấu tạo cơ bản của mọi sinh vật sống là gì?', opts: ['Rock', 'Cell', 'Plastic', 'Wave'], ans: 1, expEn: 'All living organisms are made of cells.', expVi: 'Tế bào (Cell) là đơn vị cơ bản của sự sống.' },
+          { qEn: 'Through which process do green plants convert sunlight into food?', qVi: 'Cây xanh chuyển hóa ánh sáng mặt trời thành chất hữu cơ qua quá trình nào?', opts: ['Photosynthesis', 'Gravity', 'Melting', 'Echo'], ans: 0, expEn: 'Photosynthesis uses sunlight, water, and CO2.', expVi: 'Photosynthesis là quá trình quang hợp.' },
+          { qEn: 'Which force pulls objects toward the center of the Earth?', qVi: 'Lực nào kéo mọi vật về phía tâm Trái Đất?', opts: ['Magnetism', 'Gravity', 'Sound', 'Light'], ans: 1, expEn: 'Gravity is the force of attraction toward Earth.', expVi: 'Gravity là trọng lực / lực hấp dẫn.' }
+        ]
+      },
+
+      hist_geo_s: {
+        nameVi: 'Lịch sử và Địa lí', nameEn: 'History & Geography', icon: '🏛️', color: 'amber', level: 'secondary',
+        vocab: [
+          { en: 'Civilization', ipa: '/ˌsɪv.əl.aɪˈzeɪ.ʃən/', vi: 'Nền văn minh', exEn: 'Ancient Egypt was one of the earliest civilizations.', exVi: 'Ai Cập cổ đại là một trong những nền văn minh sớm nhất.' },
+          { en: 'Climate change', ipa: '/ˈklaɪ.mət tʃeɪndʒ/', vi: 'Biến đổi khí hậu', exEn: 'Climate change causes rising sea levels worldwide.', exVi: 'Biến đổi khí hậu gây ra tình trạng mực nước biển dâng toàn cầu.' },
+          { en: 'Latitude', ipa: '/ˈlæt.ɪ.tʃuːd/', vi: 'Vĩ độ', exEn: 'Latitude measures distance north or south of the Equator.', exVi: 'Vĩ độ đo khoảng cách về phía bắc hoặc nam đường Xích đạo.' },
+          { en: 'Sovereignty', ipa: '/ˈsɒv.rɪn.ti/', vi: 'Chủ quyền', exEn: 'Protecting national sovereignty over seas and islands is sacred.', exVi: 'Bảo vệ chủ quyền biển đảo quốc gia là điều thiêng liêng.' },
+          { en: 'Dynasty', ipa: '/ˈdɪn.ə.sti/', vi: 'Triều đại', exEn: 'The Ly and Tran dynasties achieved great historical victories.', exVi: 'Triều đại nhà Lý và nhà Trần đã lập nên những chiến công lẫy lừng.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Analyze the historical significance of this event.', vi: 'Hãy phân tích ý nghĩa lịch sử của sự kiện này.' },
+          { role: 'Học sinh', en: 'Vietnam lies in the tropical monsoon climate zone.', vi: 'Việt Nam nằm trong đới khí hậu nhiệt đới gió mùa.' },
+          { role: 'Giáo viên', en: 'Use the atlas to compare population density across regions.', vi: 'Dùng Atlat để so sánh mật độ dân số giữa các vùng.' }
+        ],
+        quiz: [
+          { qEn: 'Which imaginary line is at 0 degrees latitude?', qVi: 'Đường tưởng tượng nào nằm ở 0 độ vĩ độ?', opts: ['The Equator', 'The North Pole', 'A River', 'A Mountain'], ans: 0, expEn: 'The Equator divides Earth into Northern and Southern Hemispheres.', expVi: 'Đường Xích đạo (The Equator) nằm ở 0 độ vĩ độ.' },
+          { qEn: 'Which word means "Triều đại" in History?', qVi: 'Từ nào có nghĩa là "Triều đại" trong Lịch sử?', opts: ['Dynasty', 'Gravity', 'Algorithm', 'Canvas'], ans: 0, expEn: 'A dynasty is a series of rulers from the same family.', expVi: 'Dynasty có nghĩa là triều đại.' },
+          { qEn: 'Global warming and extreme weather are signs of ___.', qVi: 'Nóng lên toàn cầu và thời tiết cực đoan là dấu hiệu của ___.', opts: ['Climate change', 'Geometry', 'Painting', 'Music'], ans: 0, expEn: 'Climate change affects weather patterns worldwide.', expVi: 'Climate change là biến đổi khí hậu.' }
+        ]
+      },
+
+      informatics_s: {
+        nameVi: 'Tin học', nameEn: 'Informatics', icon: '💻', color: 'cyan', level: 'secondary',
+        vocab: [
+          { en: 'Algorithm', ipa: '/ˈæl.ɡə.rɪ.ðəm/', vi: 'Thuật toán', exEn: 'An algorithm is a step-by-step set of instructions to solve a problem.', exVi: 'Thuật toán là dãy các bước hướng dẫn để giải quyết một bài toán.' },
+          { en: 'Database', ipa: '/ˈdeɪ.tə.beɪs/', vi: 'Cơ sở dữ liệu', exEn: 'Schools store student records in a secure database.', exVi: 'Nhà trường lưu trữ hồ sơ học sinh trong một cơ sở dữ liệu bảo mật.' },
+          { en: 'Spreadsheet', ipa: '/ˈspred.ʃiːt/', vi: 'Bảng tính điện tử', exEn: 'Use a formula in the spreadsheet to calculate the average.', exVi: 'Dùng công thức trong bảng tính để tính điểm trung bình.' },
+          { en: 'Cybersecurity', ipa: '/ˌsaɪ.bə.sɪˈkjʊə.rə.ti/', vi: 'An ninh mạng', exEn: 'Strong passwords and two-factor login improve cybersecurity.', exVi: 'Mật khẩu mạnh và xác thực hai lớp giúp tăng cường an ninh mạng.' },
+          { en: 'Debug', ipa: '/ˌdiːˈbʌɡ/', vi: 'Gỡ lỗi chương trình', exEn: 'Programmers test and debug their code carefully.', exVi: 'Lập trình viên kiểm thử và gỡ lỗi mã nguồn cẩn thận.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Draw a flowchart to represent your algorithm.', vi: 'Hãy vẽ sơ đồ khối để biểu diễn thuật toán của em.' },
+          { role: 'Học sinh', en: 'I found a syntax error and debugged my Scratch/Python program!', vi: 'Em đã tìm ra lỗi cú pháp và gỡ lỗi xong chương trình rồi ạ!' },
+          { role: 'Giáo viên', en: 'Always cite your sources when using digital content.', vi: 'Luôn trích dẫn nguồn khi sử dụng tài nguyên số nhé.' }
+        ],
+        quiz: [
+          { qEn: 'A step-by-step procedure for solving a computing problem is an ___.', qVi: 'Quy trình từng bước để giải quyết bài toán trên máy tính là ___.', opts: ['Algorithm', 'Ecosystem', 'Instrument', 'Essay'], ans: 0, expEn: 'Algorithms are the foundation of programming.', expVi: 'Algorithm là thuật toán.' },
+          { qEn: 'What does "debug" mean in programming?', qVi: '"Debug" có nghĩa là gì trong lập trình?', opts: ['Delete the computer', 'Find and fix errors in code', 'Turn off Wi-Fi', 'Print a photo'], ans: 1, expEn: 'Debugging means locating and fixing bugs (errors).', expVi: 'Debug là tìm và sửa lỗi (gỡ lỗi) trong mã lệnh.' },
+          { qEn: 'Which software tool is best for organizing numbers and formulas in rows and columns?', qVi: 'Công cụ nào tốt nhất để tính toán số liệu theo hàng và cột?', opts: ['Spreadsheet', 'Paintbrush', 'Compass', 'Microphone'], ans: 0, expEn: 'Spreadsheets like Excel or Google Sheets handle tables and formulas.', expVi: 'Spreadsheet là bảng tính điện tử.' }
+        ]
+      },
+
+      technology_s: {
+        nameVi: 'Công nghệ', nameEn: 'Technology', icon: '⚙️', color: 'orange', level: 'secondary',
+        vocab: [
+          { en: 'Electric circuit', ipa: '/ɪˈlek.trɪk ˈsɜː.kɪt/', vi: 'Mạch điện', exEn: 'Current flows only when the electric circuit is closed.', exVi: 'Dòng điện chỉ chạy qua khi mạch điện kín.' },
+          { en: 'Technical drawing', ipa: '/ˈtek.nɪ.kəl ˈdrɔː.ɪŋ/', vi: 'Bản vẽ kĩ thuật', exEn: 'Engineers read technical drawings to manufacture parts.', exVi: 'Kĩ sư đọc bản vẽ kĩ thuật để chế tạo các chi tiết.' },
+          { en: 'Renewable energy', ipa: '/rɪˈnjuː.ə.bəl ˈen.ə.dʒi/', vi: 'Năng lượng tái tạo', exEn: 'Wind and solar power are clean renewable energy sources.', exVi: 'Điện gió và điện mặt trời là nguồn năng lượng tái tạo sạch.' },
+          { en: 'Smart home', ipa: '/smɑːt həʊm/', vi: 'Ngôi nhà thông minh', exEn: 'Sensors in a smart home automatically control lighting.', exVi: 'Cảm biến trong ngôi nhà thông minh tự động điều khiển ánh sáng.' },
+          { en: 'Sustainable agriculture', ipa: '/səˈsteɪ.nə.bəl ˈæɡ.rɪ.kʌl.tʃər/', vi: 'Nông nghiệp bền vững', exEn: 'Drip irrigation supports sustainable agriculture.', exVi: 'Tưới nhỏ giọt hỗ trợ nền nông nghiệp bền vững.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Check the circuit diagram before connecting the battery.', vi: 'Kiểm tra sơ đồ mạch điện trước khi nối nguồn pin nhé.' },
+          { role: 'Học sinh', en: 'When I turn on the switch, the LED lights up!', vi: 'Khi em bật công tắc, đèn LED đã phát sáng ạ!' },
+          { role: 'Giáo viên', en: 'Follow all electrical safety regulations during practice.', vi: 'Tuân thủ nghiêm ngặt quy định an toàn điện khi thực hành.' }
+        ],
+        quiz: [
+          { qEn: 'Which of the following is a renewable energy source?', qVi: 'Nguồn năng lượng nào sau đây là năng lượng tái tạo?', opts: ['Coal', 'Solar power', 'Gasoline', 'Diesel'], ans: 1, expEn: 'Solar power is naturally replenished and clean.', expVi: 'Năng lượng mặt trời (Solar power) là năng lượng tái tạo.' },
+          { qEn: 'For electricity to flow, an electric circuit must be ___.', qVi: 'Để dòng điện chạy qua, mạch điện phải ở trạng thái ___.', opts: ['Broken', 'Closed', 'Wet', 'Empty'], ans: 1, expEn: 'A closed circuit provides a complete path for current.', expVi: 'Mạch điện kín (closed circuit) cho phép dòng điện lưu thông.' },
+          { qEn: 'What do engineers use to show exact shapes and dimensions of a product?', qVi: 'Kĩ sư dùng gì để thể hiện chính xác hình dạng và kích thước sản phẩm?', opts: ['Technical drawing', 'Fairy tale', 'Song lyrics', 'Dictionary'], ans: 0, expEn: 'Technical drawings communicate precise engineering designs.', expVi: 'Technical drawing là bản vẽ kĩ thuật.' }
+        ]
+      },
+
+      pe_s: {
+        nameVi: 'Giáo dục thể chất', nameEn: 'Physical Education', icon: '🏃', color: 'lime', level: 'secondary',
+        vocab: [
+          { en: 'Endurance', ipa: '/ɪnˈdjʊə.rəns/', vi: 'Sức bền', exEn: 'Long-distance running builds cardiovascular endurance.', exVi: 'Chạy cự li dài giúp rèn luyện sức bền tim mạch.' },
+          { en: 'Agility', ipa: '/əˈdʒɪl.ə.ti/', vi: 'Sự nhanh nhẹn / Khéo léo', exEn: 'Badminton players need speed and agility.', exVi: 'Người chơi cầu lông cần tốc độ và sự nhanh nhẹn.' },
+          { en: 'Nutrition', ipa: '/njuːˈtrɪʃ.ən/', vi: 'Dinh dưỡng', exEn: 'Balanced nutrition fuels your body for sports.', exVi: 'Dinh dưỡng cân bằng cung cấp năng lượng cho cơ thể vận động.' },
+          { en: 'Fair play', ipa: '/ˌfeə ˈpleɪ/', vi: 'Tinh thần thể thao cao thượng', exEn: 'Fair play means respecting rules and opponents.', exVi: 'Tinh thần thể thao cao thượng là tôn trọng luật chơi và đối thủ.' },
+          { en: 'Posture', ipa: '/ˈpɒs.tʃər/', vi: 'Tư thế', exEn: 'Good posture protects your spine while sitting and running.', exVi: 'Tư thế đúng bảo vệ cột sống khi ngồi học và khi chạy.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Pace your breathing evenly during the 800-meter run.', vi: 'Điều hòa nhịp thở đều đặn trong bài chạy 800 mét nhé.' },
+          { role: 'Học sinh', en: 'Coach, should we cool down and stretch after the match?', vi: 'Thầy ơi, sau trận đấu chúng em cần thả lỏng và giãn cơ đúng không ạ?' },
+          { role: 'Giáo viên', en: 'Yes! Always practice fair play and congratulate the other team.', vi: 'Đúng rồi! Hãy luôn chơi đẹp và chúc mừng đội bạn nhé.' }
+        ],
+        quiz: [
+          { qEn: 'Respecting the rules and your opponents in sports is called ___.', qVi: 'Tôn trọng luật lệ và đối thủ trong thể thao gọi là ___.', opts: ['Fair play', 'Cheating', 'Laziness', 'Giving up'], ans: 0, expEn: 'Fair play is the core value of sportsmanship.', expVi: 'Fair play là tinh thần thể thao cao thượng.' },
+          { qEn: 'Which word means the ability to keep exercising for a long time?', qVi: 'Từ nào chỉ khả năng vận động bền bỉ trong thời gian dài?', opts: ['Endurance', 'Equation', 'Metaphor', 'Budget'], ans: 0, expEn: 'Endurance means physical stamina (sức bền).', expVi: 'Endurance là sức bền.' },
+          { qEn: 'Why is balanced nutrition important for teenagers?', qVi: 'Vì sao dinh dưỡng cân bằng quan trọng với lứa tuổi THCS?', opts: ['It supports growth and energy', 'It makes you sleepy', 'It replaces sleep', 'It stops exercise'], ans: 0, expEn: 'Good nutrition provides vitamins and energy for healthy growth.', expVi: 'Dinh dưỡng tốt cung cấp năng lượng và giúp cơ thể phát triển.' }
+        ]
+      },
+
+      arts: {
+        nameVi: 'Nghệ thuật (Âm nhạc & Mĩ thuật)', nameEn: 'Arts (Music & Fine Arts)', icon: '🎭', color: 'fuchsia', level: 'secondary',
+        vocab: [
+          { en: 'Harmony', ipa: '/ˈhɑː.mə.ni/', vi: 'Hòa âm / Sự hài hòa', exEn: 'Color harmony makes a poster visually appealing.', exVi: 'Sự hài hòa màu sắc khiến tấm áp phích thu hút ánh nhìn.' },
+          { en: 'Perspective', ipa: '/pəˈspek.tɪv/', vi: 'Luật xa gần / Phối cảnh', exEn: 'Artists use perspective to create depth on a flat canvas.', exVi: 'Họa sĩ dùng luật phối cảnh để tạo chiều sâu trên mặt phẳng.' },
+          { en: 'Composition', ipa: '/ˌkɒm.pəˈzɪʃ.ən/', vi: 'Bố cục / Sáng tác', exEn: 'Pay attention to balance in your graphic composition.', exVi: 'Chú ý sự cân đối trong bố cục thiết kế đồ họa.' },
+          { en: 'Folk music', ipa: '/ˈfəʊk ˌmjuː.zɪk/', vi: 'Âm nhạc dân gian', exEn: 'Quan Ho is a treasured form of Vietnamese folk music.', exVi: 'Quan họ là một loại hình âm nhạc dân gian quý giá của Việt Nam.' },
+          { en: 'Aesthetic', ipa: '/iːsˈθet.ɪk/', vi: 'Thẩm mĩ', exEn: 'Art education nurtures aesthetic appreciation.', exVi: 'Giáo dục nghệ thuật nuôi dưỡng khả năng cảm thụ thẩm mĩ.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Let’s analyze the composition and color palette of this artwork.', vi: 'Hãy cùng phân tích bố cục và bảng màu của tác phẩm này.' },
+          { role: 'Học sinh', en: 'We composed a short melody inspired by folk music.', vi: 'Nhóm em đã sáng tác một giai điệu ngắn lấy cảm hứng từ dân ca.' },
+          { role: 'Giáo viên', en: 'Express your personal style boldly in your design.', vi: 'Hãy mạnh dạn thể hiện phong cách cá nhân trong thiết kế của em.' }
+        ],
+        quiz: [
+          { qEn: 'Which technique creates an illusion of 3D depth in a drawing?', qVi: 'Kĩ thuật nào tạo cảm giác chiều sâu không gian 3D trong bức vẽ?', opts: ['Perspective', 'Addition', 'Database', 'Gravity'], ans: 0, expEn: 'Perspective makes distant objects look smaller.', expVi: 'Perspective là luật phối cảnh (xa gần).' },
+          { qEn: 'Traditional songs passed down through generations are called ___.', qVi: 'Những làn điệu truyền thống được lưu truyền qua nhiều thế hệ gọi là ___.', opts: ['Folk music', 'Software', 'Hardware', 'Circuit'], ans: 0, expEn: 'Folk music reflects cultural identity.', expVi: 'Folk music là âm nhạc dân gian.' },
+          { qEn: 'Which word means "Bố cục" in visual arts or "Sáng tác" in music?', qVi: 'Từ nào có nghĩa là "Bố cục" (Mĩ thuật) hoặc "Sáng tác" (Âm nhạc)?', opts: ['Composition', 'Latitude', 'Oxygen', 'Citizen'], ans: 0, expEn: 'Composition refers to how artistic elements are arranged.', expVi: 'Composition là bố cục / tác phẩm sáng tác.' }
+        ]
+      },
+
+      career: {
+        nameVi: 'Hoạt động trải nghiệm, hướng nghiệp', nameEn: 'Experiential & Career Guidance', icon: '🧭', color: 'violet', level: 'secondary',
+        vocab: [
+          { en: 'Career path', ipa: '/kəˈrɪər pɑːθ/', vi: 'Định hướng nghề nghiệp', exEn: 'Exploring your strengths helps you choose a suitable career path.', exVi: 'Khám phá thế mạnh bản thân giúp em chọn định hướng nghề nghiệp phù hợp.' },
+          { en: 'Soft skills', ipa: '/sɒft skɪlz/', vi: 'Kĩ năng mềm', exEn: 'Communication and teamwork are essential soft skills.', exVi: 'Giao tiếp và làm việc nhóm là những kĩ năng mềm thiết yếu.' },
+          { en: 'Time management', ipa: '/taɪm ˈmæn.ɪdʒ.mənt/', vi: 'Quản lí thời gian', exEn: 'Good time management reduces stress before exams.', exVi: 'Quản lí thời gian tốt giúp giảm căng thẳng trước kì thi.' },
+          { en: 'Entrepreneurship', ipa: '/ˌɒn.trə.prəˈnɜː.ʃɪp/', vi: 'Tinh thần khởi nghiệp', exEn: 'School fairs encourage creativity and entrepreneurship.', exVi: 'Hội chợ trường học khuyến khích sự sáng tạo và tinh thần khởi nghiệp.' },
+          { en: 'Self-confidence', ipa: '/ˌselfˈkɒn.fɪ.dəns/', vi: 'Sự tự tin vào bản thân', exEn: 'Practicing public speaking builds self-confidence.', exVi: 'Luyện nói trước đám đông giúp xây dựng sự tự tin.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'What profession inspires you the most and why?', vi: 'Nghề nghiệp nào truyền cảm hứng cho em nhất và vì sao?' },
+          { role: 'Học sinh', en: 'I want to become a software engineer because I enjoy solving problems.', vi: 'Em muốn trở thành kĩ sư phần mềm vì em thích giải quyết vấn đề.' },
+          { role: 'Giáo viên', en: 'Set SMART goals for your upcoming semester!', vi: 'Hãy đặt mục tiêu SMART cho học kì sắp tới nhé!' }
+        ],
+        quiz: [
+          { qEn: 'Communication, teamwork, and adaptability are known as ___.', qVi: 'Giao tiếp, làm việc nhóm và thích nghi được gọi là ___.', opts: ['Soft skills', 'Triangles', 'Chemicals', 'Rivers'], ans: 0, expEn: 'Soft skills help you work effectively with others.', expVi: 'Soft skills là các kĩ năng mềm.' },
+          { qEn: 'Organizing your study schedule wisely is called ___.', qVi: 'Sắp xếp lịch học tập khoa học, hợp lí gọi là ___.', opts: ['Time management', 'Photosynthesis', 'Sculpture', 'Dynasty'], ans: 0, expEn: 'Time management helps you finish tasks without rushing.', expVi: 'Time management là quản lí thời gian.' },
+          { qEn: 'Knowing your interests and strengths helps plan your future ___.', qVi: 'Hiểu rõ sở thích và thế mạnh giúp lập kế hoạch cho ___ tương lai.', opts: ['Career path', 'Traffic light', 'Paintbrush', 'Weather'], ans: 0, expEn: 'A career path is your long-term professional journey.', expVi: 'Career path là con đường / định hướng nghề nghiệp.' }
+        ]
+      },
+
+      local_edu: {
+        nameVi: 'Giáo dục địa phương', nameEn: 'Local Education', icon: '🏡', color: 'emerald', level: 'secondary',
+        vocab: [
+          { en: 'Traditional craft', ipa: '/trəˈdɪʃ.ən.əl krɑːft/', vi: 'Nghề thủ công truyền thống', exEn: 'Our province is famous for pottery and silk weaving traditional crafts.', exVi: 'Tỉnh của chúng em nổi tiếng với các nghề thủ công truyền thống như gốm và dệt lụa.' },
+          { en: 'Specialty', ipa: '/ˈspeʃ.əl.ti/', vi: 'Đặc sản địa phương', exEn: 'Tourists love tasting our local culinary specialties.', exVi: 'Du khách rất thích thưởng thức các món đặc sản địa phương.' },
+          { en: 'Historical relic', ipa: '/hɪˈstɒr.ɪ.kəl ˈrel.ɪk/', vi: 'Di tích lịch sử', exEn: 'We visited an ancient pagoda and historical relic in our hometown.', exVi: 'Chúng em đã đến thăm một ngôi chùa cổ và di tích lịch sử tại quê hương.' },
+          { en: 'Ecotourism', ipa: '/ˈiː.kəʊˌtʊə.rɪ.zəm/', vi: 'Du lịch sinh thái', exEn: 'Ecotourism protects nature while supporting local farmers.', exVi: 'Du lịch sinh thái vừa bảo vệ thiên nhiên vừa hỗ trợ người dân địa phương.' },
+          { en: 'Cultural identity', ipa: '/ˈkʌl.tʃər.əl aɪˈden.tə.ti/', vi: 'Bản sắc văn hóa', exEn: 'Preserving festivals strengthens our cultural identity.', exVi: 'Gìn giữ các lễ hội làm giàu thêm bản sắc văn hóa của chúng ta.' }
+        ],
+        classroom: [
+          { role: 'Giáo viên', en: 'Introduce a famous landmark or craft village in your hometown in English!', vi: 'Hãy giới thiệu một danh thắng hoặc làng nghề quê em bằng tiếng Anh nhé!' },
+          { role: 'Học sinh', en: 'Welcome to my hometown! We are proud of our friendly people and rich heritage.', vi: 'Chào mừng đến với quê hương em! Chúng em tự hào về con người thân thiện và di sản phong phú.' },
+          { role: 'Giáo viên', en: 'Let’s design a bilingual travel brochure for our province.', vi: 'Chúng ta hãy thiết kế một tờ rơi du lịch song ngữ cho tỉnh nhà nhé.' }
+        ],
+        quiz: [
+          { qEn: 'A special food or product unique to a region is called a local ___.', qVi: 'Món ăn hoặc sản vật đặc trưng của một vùng miền gọi là ___.', opts: ['Specialty', 'Equation', 'Algorithm', 'Keyboard'], ans: 0, expEn: 'Local specialties represent the flavors of a hometown.', expVi: 'Specialty là đặc sản địa phương.' },
+          { qEn: 'Tourism that respects nature and supports local communities is ___.', qVi: 'Loại hình du lịch gắn với bảo vệ thiên nhiên và hỗ trợ cộng đồng là ___.', opts: ['Ecotourism', 'Cyberbullying', 'Subtraction', 'Gravity'], ans: 0, expEn: 'Ecotourism promotes sustainable travel.', expVi: 'Ecotourism là du lịch sinh thái.' },
+          { qEn: 'Pottery making, wood carving, and bamboo weaving are examples of ___.', qVi: 'Làm gốm, chạm khắc gỗ, đan mây tre là ví dụ về ___.', opts: ['Traditional crafts', 'Electric circuits', 'Musical notes', 'Integers'], ans: 0, expEn: 'Traditional crafts preserve local skills across generations.', expVi: 'Traditional crafts là các nghề thủ công truyền thống.' }
+        ]
+      }
+    };
+
+    /* =========================================================================
+       3. TRẠNG THÁI ỨNG DỤNG & LƯU TRỮ LOCALSTORAGE
+       ========================================================================= */
+    const STORAGE_KEY = 'esl_gdpt2018_state_v1';
+
+    let appState = {
+      level: 'primary',          // 'primary' | 'secondary'
+      grade: 1,                  // 1..9
+      immersionMode: false,      // true = Ẩn nghĩa Tiếng Việt
+      voiceAccent: 'en-US',      // 'en-US' | 'en-GB'
+      stars: 0,                  // Tổng điểm sao
+      completedQuizzes: {}       // Lưu { "grade_subjectKey": true }
+    };
+
+    // Biến tạm cho Modal đang mở
+    let activeSubjectKey = null;
+    let activeModalTab = 'vocab';
+    let quizAnswersState = {}; // Lưu trạng thái chọn đáp án trong phiên làm Quiz hiện tại
+
+    // Khôi phục dữ liệu từ localStorage an toàn
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          appState = { ...appState, ...parsed };
+        }
+      } catch (e) {
+        console.warn('Không thể đọc localStorage:', e);
+      }
+    }
+
+    // Lưu dữ liệu vào localStorage
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.warn('Không thể lưu localStorage:', e);
+      }
+    }
+
+    /* =========================================================================
+       4. PHÁT ÂM CHUẨN ANH-MỸ (WEB SPEECH API)
+       ========================================================================= */
+    function speakText(text, btnElement = null) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Trình duyệt của bạn chưa hỗ trợ đọc giọng nói tự động.', '⚠️');
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        // Xóa hiệu ứng nút cũ nếu có
+        document.querySelectorAll('.speaking-active').forEach(el => el.classList.remove('speaking-active'));
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = appState.voiceAccent;
+        utterance.rate = 0.92; // Tốc độ rõ ràng, dễ nghe cho học sinh
+
+        // Tìm giọng phù hợp với accent đang chọn
+        const voices = window.speechSynthesis.getVoices();
+        const preferred = voices.find(v => v.lang === appState.voiceAccent) ||
+                          voices.find(v => v.lang.startsWith('en'));
+        if (preferred) utterance.voice = preferred;
+
+        if (btnElement) {
+          btnElement.classList.add('speaking-active');
+          utterance.onend = () => btnElement.classList.remove('speaking-active');
+          utterance.onerror = () => btnElement.classList.remove('speaking-active');
+        }
+
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        showToast('Không thể phát âm lúc này. Vui lòng thử lại.', '⚠️');
+      }
+    }
+
+    function setVoiceAccent(accent) {
+      appState.voiceAccent = accent;
+      saveState();
+      updateVoiceButtonsUI();
+      showToast(accent === 'en-US' ? 'Đã chuyển sang giọng Anh–Mỹ (US)' : 'Đã chuyển sang giọng Anh–Anh (UK)', '🔊');
+    }
+
+    function updateVoiceButtonsUI() {
+      const isUS = appState.voiceAccent === 'en-US';
+      const activeDesk = 'px-2.5 py-1 rounded-lg transition-colors bg-white text-sky-700';
+      const inactiveDesk = 'px-2.5 py-1 rounded-lg transition-colors text-white hover:bg-white/10';
+      const activeMob = 'px-2.5 py-1 rounded-md bg-white text-sky-700 shadow-sm';
+      const inactiveMob = 'px-2.5 py-1 rounded-md text-slate-600';
+
+      const usD = document.getElementById('voiceUSBtn');
+      const ukD = document.getElementById('voiceUKBtn');
+      const usM = document.getElementById('voiceUSBtnMob');
+      const ukM = document.getElementById('voiceUKBtnMob');
+
+      if (usD && ukD) {
+        usD.className = isUS ? activeDesk : inactiveDesk;
+        ukD.className = !isUS ? activeDesk : inactiveDesk;
+      }
+      if (usM && ukM) {
+        usM.className = isUS ? activeMob : inactiveMob;
+        ukM.className = !isUS ? activeMob : inactiveMob;
+      }
+    }
+
+    /* =========================================================================
+       5. CHẾ ĐỘ IMMERSION MODE (ẨN / HIỆN NGHĨA TIẾNG VIỆT)
+       ========================================================================= */
+    function toggleImmersionMode() {
+      appState.immersionMode = !appState.immersionMode;
+      saveState();
+      applyImmersionUI();
+      showToast(
+        appState.immersionMode
+          ? 'Đã bật chế độ Thuần Tiếng Anh (Ẩn nghĩa Tiếng Việt)'
+          : 'Đã bật chế độ Song ngữ Anh – Việt',
+        appState.immersionMode ? '🇬🇧' : '🇻🇳'
+      );
+    }
+
+    function applyImmersionUI() {
+      const btn = document.getElementById('immersionToggleBtn');
+      const dot = document.getElementById('immersionDot');
+      const label = document.getElementById('immersionLabel');
+      const labelShort = document.getElementById('immersionLabelShort');
+
+      if (appState.immersionMode) {
+        document.body.classList.add('immersion-on');
+        btn.classList.add('bg-teal-50', 'border-teal-400', 'text-teal-800');
+        btn.classList.remove('bg-slate-50', 'border-slate-200', 'text-slate-700');
+        dot.classList.add('bg-teal-500');
+        dot.classList.remove('bg-slate-400');
+        label.textContent = 'Thuần Anh';
+        labelShort.textContent = 'EN Only';
+      } else {
+        document.body.classList.remove('immersion-on');
+        btn.classList.remove('bg-teal-50', 'border-teal-400', 'text-teal-800');
+        btn.classList.add('bg-slate-50', 'border-slate-200', 'text-slate-700');
+        dot.classList.remove('bg-teal-500');
+        dot.classList.add('bg-slate-400');
+        label.textContent = 'Song ngữ';
+        labelShort.textContent = 'VN/EN';
+      }
+    }
+
+    /* =========================================================================
+       6. CHỌN CẤP HỌC, KHỐI LỚP & HIỂN THỊ LƯỚI MÔN HỌC
+       ========================================================================= */
+    function selectLevel(level) {
+      appState.level = level;
+      // Nếu lớp hiện tại không thuộc cấp mới chọn, tự động chuyển về lớp đầu cấp
+      if (level === 'primary' && appState.grade > 5) appState.grade = 1;
+      if (level === 'secondary' && appState.grade < 6) appState.grade = 6;
+      saveState();
+      renderLevelAndGrades();
+      renderSubjectsGrid();
+    }
+
+    function selectGrade(grade) {
+      appState.grade = grade;
+      appState.level = grade <= 5 ? 'primary' : 'secondary';
+      saveState();
+      renderLevelAndGrades();
+      renderSubjectsGrid();
+    }
+
+    function renderLevelAndGrades() {
+      const tabPrimary = document.getElementById('tabPrimary');
+      const tabSecondary = document.getElementById('tabSecondary');
+      const activeTabCls = 'px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-sky-600 to-teal-500 text-white shadow-md shadow-sky-500/20';
+      const inactiveTabCls = 'px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700';
+
+      tabPrimary.className = appState.level === 'primary' ? activeTabCls : inactiveTabCls;
+      tabSecondary.className = appState.level === 'secondary' ? activeTabCls : inactiveTabCls;
+
+      const grades = appState.level === 'primary' ? [1, 2, 3, 4, 5] : [6, 7, 8, 9];
+      const selector = document.getElementById('gradeSelector');
+      selector.innerHTML = grades.map(g => {
+        const isActive = g === appState.grade;
+        return `
+          <button
+            type="button"
+            onclick="selectGrade(${g})"
+            class="px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
+              isActive
+                ? 'bg-sky-600 text-white shadow-md shadow-sky-500/25 scale-105'
+                : 'bg-white text-slate-700 border border-slate-200 hover:border-sky-300 hover:bg-sky-50'
+            }"
+          >
+            Lớp ${g}
+          </button>
+        `;
+      }).join('');
+    }
+
+    // Bảng màu nhẹ nhàng cho từng thẻ môn học
+    const COLOR_MAP = {
+      sky: 'bg-sky-100 text-sky-700',
+      rose: 'bg-rose-100 text-rose-700',
+      indigo: 'bg-indigo-100 text-indigo-700',
+      pink: 'bg-pink-100 text-pink-700',
+      emerald: 'bg-emerald-100 text-emerald-700',
+      teal: 'bg-teal-100 text-teal-700',
+      amber: 'bg-amber-100 text-amber-700',
+      cyan: 'bg-cyan-100 text-cyan-700',
+      orange: 'bg-orange-100 text-orange-700',
+      lime: 'bg-lime-100 text-lime-700',
+      violet: 'bg-violet-100 text-violet-700',
+      fuchsia: 'bg-fuchsia-100 text-fuchsia-700',
+      yellow: 'bg-yellow-100 text-yellow-700',
+      blue: 'bg-blue-100 text-blue-700'
+    };
+
+    function renderSubjectsGrid() {
+      const cfg = GRADE_CONFIG[appState.grade];
+      const grid = document.getElementById('subjectsGrid');
+
+      // Cập nhật banner khối lớp
+      document.getElementById('gradeBannerIcon').textContent = cfg.icon;
+      document.getElementById('gradeBannerTitle').textContent = `${cfg.label} • Chương trình GDPT 2018`;
+      document.getElementById('gradeBannerDesc').textContent = cfg.desc;
+
+      let completedCount = 0;
+      cfg.subjects.forEach(sKey => {
+        if (appState.completedQuizzes[`${appState.grade}_${sKey}`]) completedCount++;
+      });
+      document.getElementById('gradeProgressText').textContent = `Hoàn thành: ${completedCount}/${cfg.subjects.length} môn`;
+
+      grid.innerHTML = cfg.subjects.map(sKey => {
+        const sub = SUBJECTS_DB[sKey];
+        const badgeCls = COLOR_MAP[sub.color] || 'bg-sky-100 text-sky-700';
+        const isDone = !!appState.completedQuizzes[`${appState.grade}_${sKey}`];
+
+        return `
+          <div class="group bg-white rounded-3xl p-5 border ${isDone ? 'border-teal-300 ring-1 ring-teal-100' : 'border-slate-200/90'} shadow-sm hover:shadow-lg hover:border-sky-300 hover:-translate-y-1 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-2 mb-4">
+                <div class="w-12 h-12 rounded-2xl ${badgeCls} flex items-center justify-center text-2xl shadow-sm group-hover:scale-110 transition-transform">
+                  ${sub.icon}
+                </div>
+                ${isDone
+                  ? '<span class="px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 border border-teal-200 text-[11px] font-bold">✓ Đã chinh phục</span>'
+                  : `<span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold">${sub.vocab.length} thuật ngữ</span>`
+                }
+              </div>
+
+              <h4 class="font-extrabold text-slate-900 text-base leading-snug mb-0.5">${sub.nameVi}</h4>
+              <p class="text-sm font-semibold text-sky-600 mb-4">${sub.nameEn}</p>
+            </div>
+
+            <button
+              type="button"
+              onclick="openLearningModal('${sKey}')"
+              class="w-full py-2.5 px-4 rounded-xl bg-slate-50 hover:bg-gradient-to-r hover:from-sky-600 hover:to-teal-500 text-slate-700 hover:text-white font-bold text-sm border border-slate-200 hover:border-transparent transition-all flex items-center justify-center gap-1.5"
+            >
+              <span>Vào học ngay</span>
+              <span>→</span>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* =========================================================================
+       7. MODAL KHÔNG GIAN HỌC TƯƠNG TÁC (3 TAB: TỪ VỰNG, GIAO TIẾP, QUIZ)
+       ========================================================================= */
+    function openLearningModal(subjectKey) {
+      activeSubjectKey = subjectKey;
+      activeModalTab = 'vocab';
+      quizAnswersState = {}; // Làm mới phiên làm bài quiz
+
+      const sub = SUBJECTS_DB[subjectKey];
+      document.getElementById('modalSubjectIcon').textContent = sub.icon;
+      document.getElementById('modalGradeBadge').textContent = `Lớp ${appState.grade}`;
+      document.getElementById('modalSubjectEn').textContent = sub.nameEn;
+      document.getElementById('modalSubjectVi').textContent = sub.nameVi;
+
+      updateVoiceButtonsUI();
+      renderModalTabs();
+      renderModalContent();
+
+      const modal = document.getElementById('learningModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLearningModal() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      const modal = document.getElementById('learningModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function switchModalTab(tabName) {
+      activeModalTab = tabName;
+      renderModalTabs();
+      renderModalContent();
+    }
+
+    function renderModalTabs() {
+      const tabs = {
+        vocab: document.getElementById('modalTabVocab'),
+        classroom: document.getElementById('modalTabClassroom'),
+        quiz: document.getElementById('modalTabQuiz')
+      };
+      Object.entries(tabs).forEach(([key, el]) => {
+        if (key === activeModalTab) {
+          el.className = 'px-4 py-3 text-xs sm:text-sm font-bold border-b-2 border-sky-600 text-sky-700 bg-white rounded-t-xl whitespace-nowrap transition-colors';
+        } else {
+          el.className = 'px-4 py-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap transition-colors';
+        }
+      });
+    }
+
+    function escapeQuotes(str) {
+      return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    function renderModalContent() {
+      const sub = SUBJECTS_DB[activeSubjectKey];
+      const body = document.getElementById('modalBody');
+
+      // TAB 1: TỪ VỰNG & THUẬT NGỮ CHUYÊN MÔN
+      if (activeModalTab === 'vocab') {
+        body.innerHTML = `
+          <div class="mb-4 flex items-center justify-between flex-wrap gap-2">
+            <p class="text-xs sm:text-sm text-slate-600">
+              Bấm biểu tượng <strong>🔊</strong> để nghe phát âm chuẩn và đọc to theo mẫu.
+            </p>
+            <span class="hidden vi-hint-badge px-2.5 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-bold">
+              🇬🇧 Đang ẩn nghĩa Tiếng Việt (Immersion Mode)
+            </span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${sub.vocab.map(item => `
+              <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:border-sky-200 transition-colors">
+                <div class="flex items-start justify-between gap-3 mb-2">
+                  <div>
+                    <h4 class="text-lg font-extrabold text-slate-900">${item.en}</h4>
+                    <div class="text-xs font-mono text-sky-600 mt-0.5">${item.ipa}</div>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="speakText('${escapeQuotes(item.en)}', this)"
+                    title="Nghe phát âm từ này"
+                    class="w-10 h-10 rounded-xl bg-sky-50 hover:bg-sky-600 text-sky-600 hover:text-white flex items-center justify-center text-lg transition-all shrink-0"
+                  >🔊</button>
+                </div>
+                <div class="vi-text text-sm font-bold text-teal-700 mb-3">${item.vi}</div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs sm:text-sm">
+                  <div class="flex items-start justify-between gap-2">
+                    <p class="text-slate-800 font-medium leading-relaxed">“${item.exEn}”</p>
+                    <button
+                      type="button"
+                      onclick="speakText('${escapeQuotes(item.exEn)}', this)"
+                      title="Nghe cả câu ví dụ"
+                      class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:bg-sky-50 text-sky-600 flex items-center justify-center text-xs shrink-0"
+                    >🔊</button>
+                  </div>
+                  <p class="vi-text text-slate-500 mt-1.5">${item.exVi}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      // TAB 2: GIAO TIẾP LỚP HỌC (CLASSROOM ENGLISH)
+      else if (activeModalTab === 'classroom') {
+        body.innerHTML = `
+          <div class="mb-4">
+            <p class="text-xs sm:text-sm text-slate-600">
+              Mẫu câu giao tiếp thực tế giữa <strong>Giáo viên</strong> và <strong>Học sinh</strong> trong tiết học môn <strong>${sub.nameVi}</strong>.
+            </p>
+          </div>
+          <div class="space-y-3.5">
+            ${sub.classroom.map(item => {
+              const isTeacher = item.role === 'Giáo viên';
+              return `
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm flex items-start justify-between gap-4">
+                  <div class="flex-1">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold mb-2 ${
+                      isTeacher ? 'bg-indigo-50 text-indigo-700' : 'bg-emerald-50 text-emerald-700'
+                    }">
+                      <span>${isTeacher ? '👩🏫' : '🎒'}</span> ${item.role}
+                    </span>
+                    <p class="text-base sm:text-lg font-bold text-slate-900 leading-snug mb-1.5">${item.en}</p>
+                    <p class="vi-text text-sm text-slate-500">${item.vi}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="speakText('${escapeQuotes(item.en)}', this)"
+                    title="Nghe phát âm mẫu câu"
+                    class="w-11 h-11 rounded-2xl bg-sky-50 hover:bg-sky-600 text-sky-600 hover:text-white flex items-center justify-center text-xl transition-all shrink-0"
+                  >🔊</button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      // TAB 3: THỬ THÁCH TRẮC NGHIỆM SONG NGỮ
+      else if (activeModalTab === 'quiz') {
+        const totalQ = sub.quiz.length;
+        const answeredCount = Object.keys(quizAnswersState).length;
+        let correctCount = 0;
+        sub.quiz.forEach((q, idx) => {
+          if (quizAnswersState[idx] === q.ans) correctCount++;
+        });
+
+        body.innerHTML = `
+          <div class="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-white p-4 rounded-2xl border border-slate-200">
+            <div>
+              <div class="text-sm font-extrabold text-slate-900">Thử thách liên môn (${totalQ} câu hỏi)</div>
+              <div class="text-xs text-slate-500">Trả lời đúng mỗi câu nhận ngay <strong>+10 ⭐ sao</strong>!</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold">
+                Đúng: ${correctCount}/${totalQ}
+              </span>
+              ${answeredCount > 0 ? `
+                <button type="button" onclick="resetCurrentQuiz()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors">
+                  ↺ Làm lại
+                </button>
+              ` : ''}
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            ${sub.quiz.map((q, qIdx) => {
+              const userChoice = quizAnswersState[qIdx];
+              const isAnswered = userChoice !== undefined;
+              const isCorrect = userChoice === q.ans;
+
+              return `
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border ${
+                  !isAnswered ? 'border-slate-200' : (isCorrect ? 'border-emerald-300' : 'border-rose-300')
+                } shadow-sm">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                      <span class="inline-block text-xs font-extrabold text-sky-600 uppercase mb-1">Question ${qIdx + 1}</span>
+                      <h4 class="text-sm sm:text-base font-bold text-slate-900">${q.qEn}</h4>
+                      <p class="vi-text text-xs sm:text-sm text-slate-500 mt-0.5">${q.qVi}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onclick="speakText('${escapeQuotes(q.qEn)}', this)"
+                      title="Nghe đọc câu hỏi"
+                      class="w-9 h-9 rounded-xl bg-sky-50 hover:bg-sky-600 text-sky-600 hover:text-white flex items-center justify-center text-sm shrink-0"
+                    >🔊</button>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    ${q.opts.map((opt, optIdx) => {
+                      let btnCls = 'bg-slate-50 hover:bg-sky-50 border-slate-200 hover:border-sky-300 text-slate-800';
+                      let iconMark = String.fromCharCode(65 + optIdx);
+
+                      if (isAnswered) {
+                        if (optIdx === q.ans) {
+                          btnCls = 'bg-emerald-50 border-emerald-500 text-emerald-900 font-bold';
+                          iconMark = '✓';
+                        } else if (optIdx === userChoice && !isCorrect) {
+                          btnCls = 'bg-rose-50 border-rose-400 text-rose-800';
+                          iconMark = '✕';
+                        } else {
+                          btnCls = 'bg-slate-50 border-slate-100 text-slate-400 opacity-70';
+                        }
+                      }
+
+                      return `
+                        <button
+                          type="button"
+                          ${isAnswered ? 'disabled' : ''}
+                          onclick="answerQuiz(${qIdx}, ${optIdx})"
+                          class="p-3 rounded-xl border text-left text-sm transition-all flex items-center gap-3 ${btnCls}"
+                        >
+                          <span class="w-7 h-7 rounded-lg bg-white border border-current/20 flex items-center justify-center text-xs font-extrabold shrink-0">${iconMark}</span>
+                          <span>${opt}</span>
+                        </button>
+                      `;
+                    }).join('')}
+                  </div>
+
+                  ${isAnswered ? `
+                    <div class="mt-3.5 p-3.5 rounded-xl text-xs sm:text-sm ${isCorrect ? 'bg-emerald-50 text-emerald-900' : 'bg-rose-50 text-rose-900'}">
+                      <div class="font-bold mb-1">${isCorrect ? '🎉 Chính xác! (+10 sao)' : '💡 Chưa chính xác, xem giải thích nhé:'}</div>
+                      <p class="font-medium">${q.expEn}</p>
+                      <p class="vi-text opacity-80 mt-0.5">${q.expVi}</p>
+                    </div>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+    }
+
+    function answerQuiz(qIdx, optIdx) {
+      if (quizAnswersState[qIdx] !== undefined) return;
+      quizAnswersState[qIdx] = optIdx;
+
+      const sub = SUBJECTS_DB[activeSubjectKey];
+      const q = sub.quiz[qIdx];
+
+      // Cộng sao nếu trả lời đúng
+      if (optIdx === q.ans) {
+        addStars(10);
+      }
+
+      // Kiểm tra nếu đã hoàn thành toàn bộ câu hỏi của môn này
+      if (Object.keys(quizAnswersState).length === sub.quiz.length) {
+        const key = `${appState.grade}_${activeSubjectKey}`;
+        if (!appState.completedQuizzes[key]) {
+          appState.completedQuizzes[key] = true;
+          saveState();
+          renderSubjectsGrid();
+          showToast(`Chúc mừng! Bạn đã hoàn thành thử thách môn ${sub.nameVi} (Lớp ${appState.grade})!`, '🏆');
+        }
+      }
+
+      renderModalContent();
+    }
+
+    function resetCurrentQuiz() {
+      quizAnswersState = {};
+      renderModalContent();
+    }
+
+    function addStars(amount) {
+      appState.stars += amount;
+      saveState();
+      updateStarBadge(true);
+    }
+
+    function updateStarBadge(animate = false) {
+      const countEl = document.getElementById('starCount');
+      const badgeEl = document.getElementById('starBadge');
+      countEl.textContent = appState.stars;
+      if (animate) {
+        badgeEl.classList.remove('star-pop');
+        void badgeEl.offsetWidth; // trigger reflow
+        badgeEl.classList.add('star-pop');
+      }
+    }
+
+    /* =========================================================================
+       8. TRA CỨU NHANH THUẬT NGỮ LIÊN MÔN (REAL-TIME SEARCH)
+       ========================================================================= */
+    // Tạo danh sách thuật ngữ phẳng từ toàn bộ kho dữ liệu
+    const ALL_GLOSSARY_ITEMS = [];
+    Object.entries(SUBJECTS_DB).forEach(([sKey, sub]) => {
+      sub.vocab.forEach(v => {
+        ALL_GLOSSARY_ITEMS.push({
+          ...v,
+          subjectKey: sKey,
+          subjectVi: sub.nameVi,
+          subjectEn: sub.nameEn,
+          icon: sub.icon,
+          level: sub.level
+        });
+      });
+    });
+
+    function clearGlossarySearch() {
+      document.getElementById('glossarySearchInput').value = '';
+      renderGlossary();
+    }
+
+    function renderGlossary() {
+      const query = document.getElementById('glossarySearchInput').value.trim().toLowerCase();
+      const levelFilter = document.getElementById('glossaryLevelFilter').value;
+      const clearBtn = document.getElementById('clearSearchBtn');
+      clearBtn.classList.toggle('hidden', query.length === 0);
+
+      const filtered = ALL_GLOSSARY_ITEMS.filter(item => {
+        const matchLevel = levelFilter === 'all' || item.level === levelFilter;
+        if (!matchLevel) return false;
+        if (!query) return true;
+        return (
+          item.en.toLowerCase().includes(query) ||
+          item.vi.toLowerCase().includes(query) ||
+          item.subjectVi.toLowerCase().includes(query) ||
+          item.subjectEn.toLowerCase().includes(query)
+        );
+      });
+
+      const countInfo = document.getElementById('glossaryCountInfo');
+      const container = document.getElementById('glossaryResults');
+
+      if (filtered.length === 0) {
+        countInfo.textContent = 'Không tìm thấy thuật ngữ phù hợp.';
+        container.innerHTML = `
+          <div class="col-span-full bg-white rounded-3xl p-10 text-center border border-slate-200">
+            <div class="text-4xl mb-3">🔎</div>
+            <p class="font-bold text-slate-800 mb-1">Không tìm thấy kết quả cho “${document.getElementById('glossarySearchInput').value}”</p>
+            <p class="text-sm text-slate-500">Thử nhập từ khóa khác như: <em>Triangle</em>, <em>Phân số</em>, <em>Algorithm</em>, <em>Khoa học</em>...</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Hiển thị tối đa 12 kết quả mặc định khi chưa gõ từ khóa để trang gọn gàng, khi có từ khóa hiện tất cả
+      const displayList = query ? filtered : filtered.slice(0, 12);
+      countInfo.textContent = query
+        ? `Tìm thấy ${filtered.length} thuật ngữ khớp với từ khóa.`
+        : `Hiển thị ${displayList.length}/${filtered.length} thuật ngữ tiêu biểu (gõ từ khóa để tra cứu toàn bộ kho từ vựng).`;
+
+      container.innerHTML = displayList.map(item => `
+        <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm hover:border-sky-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div>
+                <div class="font-extrabold text-slate-900 text-base">${item.en}</div>
+                <div class="text-xs font-mono text-sky-600">${item.ipa}</div>
+              </div>
+              <button
+                type="button"
+                onclick="speakText('${escapeQuotes(item.en)}', this)"
+                title="Nghe phát âm"
+                class="w-9 h-9 rounded-xl bg-sky-50 hover:bg-sky-600 text-sky-600 hover:text-white flex items-center justify-center text-base transition-colors shrink-0"
+              >🔊</button>
+            </div>
+            <div class="vi-text text-sm font-bold text-teal-700 mb-3">${item.vi}</div>
+          </div>
+          <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="font-semibold text-slate-600 truncate">${item.icon} ${item.subjectVi}</span>
+            <span class="px-2 py-0.5 rounded-md font-bold shrink-0 ${
+              item.level === 'primary' ? 'bg-sky-50 text-sky-700' : 'bg-indigo-50 text-indigo-700'
+            }">
+              ${item.level === 'primary' ? 'Tiểu học' : 'THCS'}
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* =========================================================================
+       9. TIỆN ÍCH GIAO DIỆN: MOBILE MENU, ĐẶT LẠI TIẾN ĐỘ, TOAST
+       ========================================================================= */
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.add('hidden');
+    }
+
+    function openResetModal() {
+      const m = document.getElementById('resetConfirmModal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+    function closeResetModal() {
+      const m = document.getElementById('resetConfirmModal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+    function confirmResetProgress() {
+      appState.stars = 0;
+      appState.completedQuizzes = {};
+      saveState();
+      updateStarBadge(false);
+      renderSubjectsGrid();
+      closeResetModal();
+      showToast('Đã đặt lại toàn bộ điểm sao và tiến độ học tập!', '✅');
+    }
+
+    let toastTimer = null;
+    function showToast(message, icon = '✨') {
+      const box = document.getElementById('toastBox');
+      document.getElementById('toastIcon').textContent = icon;
+      document.getElementById('toastMessage').textContent = message;
+      box.classList.remove('hidden');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        box.classList.add('hidden');
+      }, 3200);
+    }
+
+    // Đóng modal bằng phím Escape hoặc click ra nền tối
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLearningModal();
+        closeResetModal();
+      }
+    });
+    document.getElementById('learningModal').addEventListener('click', (e) => {
+      if (e.target.id === 'learningModal') closeLearningModal();
+    });
+    document.getElementById('resetConfirmModal').addEventListener('click', (e) => {
+      if (e.target.id === 'resetConfirmModal') closeResetModal();
+    });
+
+    /* =========================================================================
+       10. KHỞI TẠO ỨNG DỤNG KHI TẢI TRANG
+       ========================================================================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      applyImmersionUI();
+      updateStarBadge(false);
+      renderLevelAndGrades();
+      renderSubjectsGrid();
+      renderGlossary();
+      // Kích hoạt tải danh sách giọng nói Web Speech API sớm trên trình duyệt
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
+    });
+  </script>
+</body>
+</html>
